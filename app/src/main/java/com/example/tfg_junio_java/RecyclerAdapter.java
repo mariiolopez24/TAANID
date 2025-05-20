@@ -1,6 +1,8 @@
+
 package com.example.tfg_junio_java;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,11 +29,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
     private FragmentTransaction ft;
     private Context context;
 
-    public RecyclerAdapter(Context context, ArrayList<Pelicula> listaPelis, FragmentTransaction ft) {
+    public RecyclerAdapter(Context context, ArrayList<Pelicula> listaPelis, FragmentTransaction ft, boolean esAdmin) {
         this.context = context;
         this.listaPelis = listaPelis;
         this.listaPelisFull = new ArrayList<>(listaPelis);
-        ;
+        this.ft = ft;
     }
 
     @NonNull
@@ -46,12 +49,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
         holder.titulo.setText(peli.getNombrePeli());
         holder.detalle.setText(peli.getSinopsis());
 
-        // Cargar imagen desde URL con Glide
         Glide.with(context)
                 .load(peli.getImagenUrl())
-                .placeholder(R.drawable.placeholder) // imagen temporal mientras carga
-                .error(R.drawable.error_image)       // imagen si falla la carga
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error_image)
                 .into(holder.trailer);
+
     }
 
     @Override

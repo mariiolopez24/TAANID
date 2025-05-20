@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,18 +39,37 @@ public class Lista extends Fragment implements SearchView.OnQueryTextListener {
         recyclerLista = view.findViewById(R.id.recyclerPelis);
         search = view.findViewById(R.id.search);
         search.setOnQueryTextListener(this);
-
         recyclerLista.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        adapter = new RecyclerAdapter(view.getContext(), peliculas, ft);
-        recyclerLista.setAdapter(adapter);
 
-        cargarPeliculasDesdeFirestore();
+        verificarSiEsAdminYMostrarPeliculas();
 
         return view;
     }
 
-    private void cargarPeliculasDesdeFirestore() {
+    private void verificarSiEsAdminYMostrarPeliculas() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            FirebaseFirestore.getInstance().collection("usuarios").document(uid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        boolean esAdmin = documentSnapshot.getBoolean("esAdmin") != null && documentSnapshot.getBoolean("esAdmin");
+
+                        // Ahora que sabemos si es admin, cargamos las películas
+                        cargarPeliculasDesdeFirestore(esAdmin);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Error al verificar permisos", Toast.LENGTH_SHORT).show();
+                        cargarPeliculasDesdeFirestore(false); // Por defecto, no admin
+                    });
+        } else {
+            cargarPeliculasDesdeFirestore(false); // Usuario no autenticado
+        }
+    }
+
+
+
+    private void cargarPeliculasDesdeFirestore(boolean esAdmin) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Peliculas")
                 .get()
@@ -58,12 +79,16 @@ public class Lista extends Fragment implements SearchView.OnQueryTextListener {
                         Pelicula pelicula = doc.toObject(Pelicula.class);
                         peliculas.add(pelicula);
                     }
-                    adapter.notifyDataSetChanged();
+
+                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                    adapter = new RecyclerAdapter(getContext(), peliculas, ft, esAdmin);
+                    recyclerLista.setAdapter(adapter);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Error al cargar películas", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     @Override
     public boolean onQueryTextSubmit(String query) {

@@ -1,162 +1,169 @@
 package com.example.tfg_junio_java;
 
-import android.content.ContentValues;
+import android.Manifest;
 import android.content.Intent;
-import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentoRegistro#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import android.content.pm.PackageManager;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FragmentoRegistro extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
 
+    private FirebaseAuth mAuth;
 
+    private EditText usuario, contrasenia, nombre, fechaNacimiento;
+    private CheckBox checkboxAdmin;
+    private Button botonAvatar, botonRegistrarse;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private BaseDatosHelper dbHelper;
-
-    public FragmentoRegistro() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentoRegistro.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentoRegistro newInstance(String param1, String param2) {
-        FragmentoRegistro fragment = new FragmentoRegistro();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public FragmentoRegistro() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_fragmento_registro, container, false);
 
-        View v =inflater.inflate(R.layout.fragment_fragmento_registro, container, false);
+        usuario = v.findViewById(R.id.txtUsuario);
+        contrasenia = v.findViewById(R.id.txtContraseña);
+        nombre = v.findViewById(R.id.txtNombre);
+        fechaNacimiento = v.findViewById(R.id.txtFechaNacimiento);
+        checkboxAdmin = v.findViewById(R.id.checkboxAdmin);
+        botonAvatar = v.findViewById(R.id.botonAvatar);
+        botonRegistrarse = v.findViewById(R.id.botonRegistrarse);
 
-
-        TextView usuario = v.findViewById(R.id.txtUsuario);
-        TextView contrasenia = v.findViewById(R.id.txtContraseña);
-        TextView nombre = v.findViewById(R.id.txtNombre);
-        TextView fechaNacimiento = v.findViewById(R.id.txtFechaNacimiento);
-        Button botonAvatar = v.findViewById(R.id.botonAvatar);
-        Button botonRegistrarse = v.findViewById(R.id.botonRegistrarse);
-
-        dbHelper = new BaseDatosHelper(getContext());
-
-        botonAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                FragmentoAvatares fragmentoAvatares = new FragmentoAvatares();
-                ft.replace(android.R.id.content,fragmentoAvatares).commit();
-
+        botonAvatar.setOnClickListener(view -> {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1001);
+            } else {
+                abrirSelectorImagen();
             }
         });
 
-        botonRegistrarse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userdb = usuario.getText().toString();
-                String passdb = contrasenia.getText().toString();
-                String namedb = nombre.getText().toString();
-                String btddb = fechaNacimiento.getText().toString();
-
-
-                if (checkUser(userdb)){ Toast.makeText(getContext(),"El usuario ya está registrado",Toast.LENGTH_SHORT).show(); return; }
-
-                insertBBD(userdb, passdb, btddb, namedb);
-
-                Toast.makeText(getContext(),"El usuario se ha registrado correctamente",Toast.LENGTH_SHORT).show();
-
-                Intent j = new Intent(getActivity(), MainActivity.class);
-                startActivity(j);
-
-
-            }
-        });
-
-
-
+        botonRegistrarse.setOnClickListener(view -> registrarUsuario());
 
         return v;
-
-
-
-
-
-
-
-
-
     }
 
-    public boolean checkUser(String user){
-        Cursor cursor = this.dbHelper.getReadableDatabase().query(
-                EstructuraBDD.tabla_usuarios,
-                EstructuraBDD.projection,
-                EstructuraBDD.column_usuario + "=?",
-                new String[]{user},
-                null,
-                null,
-                EstructuraBDD.sortOrderAsc
-        );
-
-        return cursor.getCount() > 0;
+    private void abrirSelectorImagen() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Selecciona un avatar"), PICK_IMAGE_REQUEST);
     }
 
-    public void insertBBD(String usuario, String contrasenia, String fechaNac, String nombre){
-        ContentValues values = new ContentValues();
-        values.put(EstructuraBDD.column_usuario, usuario);
-        values.put(EstructuraBDD.column_contraseña, contrasenia);
-        values.put(EstructuraBDD.column_nombre,nombre);
-        values.put(EstructuraBDD.column_fechaNac, fechaNac);
+    private void registrarUsuario() {
+        String email = usuario.getText().toString().trim();
+        String password = contrasenia.getText().toString().trim();
+        String nombreUsuario = nombre.getText().toString().trim();
+        String fechaNac = fechaNacimiento.getText().toString().trim();
+        boolean esAdmin = checkboxAdmin.isChecked();
 
-        this.dbHelper.getWritableDatabase().insert(
-                EstructuraBDD.tabla_usuarios,
-                null,
-                values);
+        if (email.isEmpty()) {
+            Toast.makeText(getContext(), "El campo de correo electrónico es obligatorio", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            Toast.makeText(getContext(), "El campo de contraseña es obligatorio", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
+
+                        Map<String, Object> datosUsuario = new HashMap<>();
+                        datosUsuario.put("admin", esAdmin);
+
+                        if (!nombreUsuario.isEmpty()) {
+                            datosUsuario.put("Nombre", nombreUsuario);
+                        }
+
+                        if (!fechaNac.isEmpty()) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            try {
+                                Date fecha = sdf.parse(fechaNac);
+                                datosUsuario.put("FechaNacimiento", new Timestamp(fecha));
+                            } catch (ParseException e) {
+                                Toast.makeText(getContext(), "Formato de fecha inválido. Usa dd/MM/yyyy", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        if (imageUri != null) {
+                            StorageReference storageRef = FirebaseStorage.getInstance().getReference("avatars/" + uid + ".jpg");
+                            storageRef.putFile(imageUri)
+                                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        datosUsuario.put("Avatar", uri.toString());
+                                        guardarEnFirestore(uid, datosUsuario);
+                                    }))
+                                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al subir avatar: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        } else {
+                            guardarEnFirestore(uid, datosUsuario);
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 
+    private void guardarEnFirestore(String uid, Map<String, Object> datosUsuario) {
+        FirebaseFirestore.getInstance().collection("DatosUsuario")
+                .document(uid)
+                .set(datosUsuario)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(getContext(), "Registro exitoso", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                    requireActivity().finish();
+                })
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            Toast.makeText(getContext(), "Avatar seleccionado", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

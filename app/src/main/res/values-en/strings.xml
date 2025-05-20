@@ -3,7 +3,7 @@
     <string name="title_activity_inicio_si">Inicio Si</string>
     <string name="first_fragment_label">Inicio</string>
     <string name="app_name">TAANID</string>
-    <string name="usuario">User</string>
+    <string name="usuario">Email</string>
     <string name="contraseña">Password</string>
     <string name="botonLogin">Login</string>
     <string name="botonInvitado">Start as a guest</string>

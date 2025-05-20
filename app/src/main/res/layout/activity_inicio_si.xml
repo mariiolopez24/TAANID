@@ -5,13 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context=".InicioSi"
     android:background="@color/black">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"/>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -22,11 +17,22 @@
         android:theme="?attr/actionBarTheme"
         app:navigationIcon="@drawable/logoparcticanetflix2__1_" />
 
+    <Button
+        android:id="@+id/btnSubirPeliculaAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="#ff6600"
+        android:text="Subir Película"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.tfg_junio_java.Lista"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:layout="@layout/fragment_lista" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

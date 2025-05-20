@@ -7,113 +7,24 @@
     android:background="#000000"
     tools:context=".FragmentoRegistro">
 
+    <!-- Email -->
     <EditText
         android:id="@+id/txtUsuario"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#FF6600"
-        android:ems="10"
         android:hint="@string/usuario"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
         android:textColor="#FF6600"
         android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.189" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
-    <EditText
-        android:id="@+id/txtContraseña"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF6600"
-        android:ems="10"
-        android:hint="@string/contraseña"
-        android:inputType="textPassword"
-        android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269" />
-
-    <EditText
-        android:id="@+id/txtNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF6600"
-        android:ems="10"
-        android:hint="@string/nombre"
-        android:inputType="textPersonName"
-        android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.354" />
-
-    <EditText
-        android:id="@+id/txtFechaNacimiento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF6600"
-        android:ems="10"
-        android:hint="@string/fechaNac"
-        android:inputType="date"
-        android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.437" />
-
-    <Button
-        android:id="@+id/botonRegistrarse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF6600"
-        android:text="@string/botonRegistro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.61" />
-
-    <TextView
-        android:id="@+id/asterisco"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="*"
-        android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.278" />
-
-    <TextView
-        android:id="@+id/asterisco2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="*"
-        android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.341" />
 
     <TextView
         android:id="@+id/asterisco3"
@@ -121,39 +32,124 @@
         android:layout_height="wrap_content"
         android:text="*"
         android:textColor="#FF6600"
-        android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.198" />
+        app:layout_constraintTop_toTopOf="@id/txtUsuario"
+        app:layout_constraintBottom_toBottomOf="@id/txtUsuario"
+        app:layout_constraintStart_toEndOf="@id/txtUsuario"
+        android:layout_marginStart="4dp" />
 
-    <TextView
-        android:id="@+id/leyendaAsterisco"
-        android:layout_width="wrap_content"
+    <!-- Contraseña -->
+    <EditText
+        android:id="@+id/txtContraseña"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/leyenda"
+        android:backgroundTint="#FF6600"
+        android:hint="@string/contraseña"
+        android:inputType="textPassword"
+        android:padding="16dp"
         android:textColor="#FF6600"
         android:textColorHint="#FF6600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/txtUsuario"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
+    <TextView
+        android:id="@+id/asterisco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textColor="#FF6600"
+        app:layout_constraintTop_toTopOf="@id/txtContraseña"
+        app:layout_constraintBottom_toBottomOf="@id/txtContraseña"
+        app:layout_constraintStart_toEndOf="@id/txtContraseña"
+        android:layout_marginStart="4dp" />
+
+    <!-- Nombre -->
+    <EditText
+        android:id="@+id/txtNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF6600"
+        android:hint="@string/nombre"
+        android:inputType="textPersonName"
+        android:padding="16dp"
+        android:textColor="#FF6600"
+        android:textColorHint="#FF6600"
+        app:layout_constraintTop_toBottomOf="@id/txtContraseña"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Fecha de nacimiento -->
+    <EditText
+        android:id="@+id/txtFechaNacimiento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF6600"
+        android:hint="@string/fechaNac"
+        android:inputType="text"
+        android:padding="16dp"
+        android:textColor="#FF6600"
+        android:textColorHint="#FF6600"
+        app:layout_constraintTop_toBottomOf="@id/txtNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Checkbox admin -->
+    <CheckBox
+        android:id="@+id/checkboxAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Es administrador?"
+        android:textColor="#FF6600"
+        android:buttonTint="#FF6600"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/txtFechaNacimiento"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Botón avatar -->
     <Button
         android:id="@+id/botonAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#FF6600"
         android:text="@string/botonAvatar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintTop_toBottomOf="@id/checkboxAdmin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.528" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Botón registrarse -->
+    <Button
+        android:id="@+id/botonRegistrarse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF6600"
+        android:text="@string/botonRegistro"
+        app:layout_constraintTop_toBottomOf="@id/botonAvatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Leyenda asterisco -->
+    <TextView
+        android:id="@+id/leyendaAsterisco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/leyenda"
+        android:textColor="#FF6600"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
