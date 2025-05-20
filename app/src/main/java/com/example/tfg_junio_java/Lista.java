@@ -80,9 +80,12 @@ public class Lista extends Fragment implements SearchView.OnQueryTextListener {
                         peliculas.add(pelicula);
                     }
 
-                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                    adapter = new RecyclerAdapter(getContext(), peliculas, ft, esAdmin);
-                    recyclerLista.setAdapter(adapter);
+                    if (isAdded()) {
+                        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                        adapter = new RecyclerAdapter(getContext(), peliculas, ft, esAdmin);
+                        recyclerLista.setAdapter(adapter);
+                    }
+
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Error al cargar películas", Toast.LENGTH_SHORT).show();

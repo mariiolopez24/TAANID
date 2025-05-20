@@ -13,6 +13,8 @@
         android:theme="@style/Theme.TFGJunioJava"
         tools:targetApi="31">
 
+        <activity android:name=".SubirPeliculaActivity" />
+
         <activity
             android:name=".FragmentActivity"
             android:exported="true" />

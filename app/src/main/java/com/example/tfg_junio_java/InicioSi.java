@@ -22,24 +22,22 @@ public class InicioSi extends AppCompatActivity {
 
         Button btnSubir = findViewById(R.id.btnSubirPeliculaAdmin);
 
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String uid = user.getUid();
-            FirebaseFirestore.getInstance().collection("usuarios").document(uid)
+            FirebaseFirestore.getInstance().collection("DatosUsuario").document(uid)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         Boolean esAdmin = documentSnapshot.getBoolean("admin");
-                        Log.d("ADMIN_CHECK", "Valor de admin: " + esAdmin); // 👈 Aquí
+                        Log.d("ADMIN_CHECK", "Valor de admin: " + esAdmin);
 
                         if (esAdmin != null && esAdmin) {
-                            Log.d("ADMIN_CHECK", "Es admin, mostrando botón"); // 👈 Aquí
                             btnSubir.setVisibility(View.VISIBLE);
                             btnSubir.setOnClickListener(v -> {
                                 Intent intent = new Intent(InicioSi.this, SubirPeliculaActivity.class);
                                 startActivity(intent);
                             });
-                        } else {
-                            Log.d("ADMIN_CHECK", "No es admin o valor nulo"); // 👈 Aquí
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -51,5 +49,5 @@ public class InicioSi extends AppCompatActivity {
         Lista lista = new Lista();
         ft.replace(R.id.fragmentContainerView, lista).commit();
     }
-
 }
+
