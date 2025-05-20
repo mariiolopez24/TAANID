@@ -1,0 +1,22 @@
+<resources>
+    <string name="title_activity_inicio_no">Inicio No</string>
+    <string name="title_activity_inicio_si">Inicio Si</string>
+    <string name="first_fragment_label">Inicio</string>
+    <string name="app_name">TAANID</string>
+    <string name="usuario">User</string>
+    <string name="contraseña">Password</string>
+    <string name="botonLogin">Login</string>
+    <string name="botonRegistro">Register</string>
+    <string name="nombre">Name</string>
+    <string name="fechaNac">Birthdate</string>
+    <string name="botonAvatar">Choose Avatar</string>
+    <string name="leyenda">Fields with * are required</string>
+    <string name="naruto">Anime of a boy who wants to be Hokage and trains to be, although there are many stones in the way</string>
+    <string name="onePiece">Luffy anime where he wants to get the One piece, which is a treasure that no one has achieved, and be the king of pirates</string>
+    <string name="dragonBall">Goku wants to be the strongest being, and for this, he has to face multiple enemies</string>
+    <string name="kimetsu">Tnajiro Kamado goes to sell coal to the city and when he returns something horrible happens that forces him to change his lifestyle</string>
+    <string name="jujutsu">The story revolves around the student Yūji Itadori, who joins a secret organization of sorcerers to kill a powerful curse called Ryōmen Sukuna after becoming its host.</string>
+    <string name="deathNote">When a Japanese student comes into possession of a mystical notebook, he discovers that he has the ability to kill anyone whose name he writes on the notebook.</string>
+    <string name="aviso1">The user has been successfully registered</string>
+    <string name="aviso2">The user is already registered</string>
+</resources>

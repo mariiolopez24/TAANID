@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "330855134590",
+    "firebase_url": "https://tfgjavajunio-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tfgjavajunio",
+    "storage_bucket": "tfgjavajunio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330855134590:android:bfc5cde9b2639d0a63af2f",
+        "android_client_info": {
+          "package_name": "com.example.tfg_junio_java"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBamwdsly618dKQBoKCjKRdRf91YgrEjGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

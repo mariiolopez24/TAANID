@@ -1,0 +1,25 @@
+<resources>
+    <string name="title_activity_inicio_no">Inicio No</string>
+    <string name="title_activity_inicio_si">Inicio Si</string>
+    <string name="first_fragment_label">Inicio</string>
+    <string name="app_name">TAANID</string>
+    <string name="usuario">Usuario</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="botonLogin">Iniciar Sesión</string>
+    <string name="botonInvitado">Iniciar como invitado</string>
+    <string name="botonRegistro">Registrarse</string>
+    <string name="nombre">Nombre</string>
+    <string name="fechaNac">Fecha de Nacimiento</string>
+    <string name="botonAvatar">Elegir Avatar</string>
+    <string name="leyenda">Los campos que llevan * son obligatorios</string>
+    <string name="naruto">Anime de un niño que quiere ser Hokage y entrena para serlo, aunque hay muchas piedras en el camino</string>
+    <string name="onePiece">Anime de Luffy donde quiere conseguir el One piece, que es un tesoro que nadie ha conseguido, y ser el rey de los piratas</string>
+    <string name="dragonBall">Goku quiere ser el ser mas fuerte, y para ello, tiene que enfrentarse a multiples enemigos</string>
+    <string name="kimetsu">Tnajiro Kamado va a vender carbon a la cuidad y cuando vuelve ocurre algo horrible que le obliga a cambiar su estilo de vida</string>
+    <string name="jujutsu">La historia gira en torno al estudiante Yūji Itadori, quien se une a una organización secreta de hechiceros para matar a una poderosa maldición llamada Ryōmen Sukuna tras convertirse en su anfitrión</string>
+    <string name="deathNote">Cuando un estudiante japonés se adueña de un cuaderno místico, descubre que tiene la facultad de matar a cualquiera cuyo nombre escriba en el cuaderno</string>
+    <string name="aviso1">El usuario ha sido registrado correctamente</string>
+    <string name="aviso2">El usuario ya está registrado</string>
+    <string name="login_error">Usuario o contraseña incorrectos</string>
+    <string name="imagen_pelicula">Imagen de la película</string>
+</resources>
