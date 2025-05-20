@@ -76,9 +76,21 @@ public class MainActivity extends AppCompatActivity {
         SesionInvitado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, InicioSi.class);
-                startActivity(intent);
+                FirebaseAuth.getInstance().signInAnonymously()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // Sesión anónima iniciada correctamente
+                                Intent intent = new Intent(MainActivity.this, InicioSi.class);
+                                startActivity(intent);
+                                finish(); // Opcional: cierra la pantalla de login
+                            } else {
+                                // Error al iniciar sesión anónima
+                                Log.e("INVITADO", "Error al iniciar como invitado", task.getException());
+                                Toast.makeText(MainActivity.this, "No se pudo iniciar como invitado", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
+
     }
 }

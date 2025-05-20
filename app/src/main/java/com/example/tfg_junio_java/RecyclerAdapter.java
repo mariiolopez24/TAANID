@@ -109,16 +109,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
             itemView.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Pelicula peli = listaPelis.get(position);
+                Pelicula peli = listaPelis.get(position); // ← Aquí defines la variable peli correctamente
+
                 FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, Detalles.newInstance(peli));
+                ft.setCustomAnimations(
+                        android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right
+                );
+                ft.replace(R.id.fragmentContainerView, Detalles.newInstance(peli));
                 ft.addToBackStack(null);
                 ft.commit();
             }
         }
+
     }
 }

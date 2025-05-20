@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,17 @@ public class InicioSi extends AppCompatActivity {
         setContentView(R.layout.activity_inicio_si);
 
         Button btnSubir = findViewById(R.id.btnSubirPeliculaAdmin);
+        btnSubir.setVisibility(View.GONE);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            boolean canGoBack = getSupportFragmentManager().getBackStackEntryCount() > 0;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(canGoBack);
+        });
+
+
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -38,6 +50,8 @@ public class InicioSi extends AppCompatActivity {
                                 Intent intent = new Intent(InicioSi.this, SubirPeliculaActivity.class);
                                 startActivity(intent);
                             });
+                        }else {
+                            btnSubir.setVisibility(View.GONE);
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -49,5 +63,22 @@ public class InicioSi extends AppCompatActivity {
         Lista lista = new Lista();
         ft.replace(R.id.fragmentContainerView, lista).commit();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }
 
