@@ -21,6 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,6 +68,9 @@ public class FragmentoRegistro extends Fragment {
         checkboxAdmin = v.findViewById(R.id.checkboxAdmin);
         botonAvatar = v.findViewById(R.id.botonAvatar);
         botonRegistrarse = v.findViewById(R.id.botonRegistrarse);
+
+        CloudinaryManager.init(requireContext());
+
 
         botonAvatar.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -129,15 +135,25 @@ public class FragmentoRegistro extends Fragment {
                         }
 
                         if (imageUri != null) {
-                            StorageReference storageRef = FirebaseStorage.getInstance().getReference("avatars/" + uid + ".jpg");
-                            storageRef.putFile(imageUri)
-                                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        datosUsuario.put("Avatar", uri.toString());
-                                        guardarEnFirestore(uid, datosUsuario);
-                                    }))
-                                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al subir avatar: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                        } else {
-                            guardarEnFirestore(uid, datosUsuario);
+                            MediaManager.get().upload(imageUri)
+                                    .callback(new UploadCallback() {
+                                        @Override
+                                        public void onSuccess(String requestId, Map resultData) {
+                                            String imageUrl = resultData.get("secure_url").toString();
+                                            datosUsuario.put("Avatar", imageUrl);
+                                            guardarEnFirestore(uid, datosUsuario);
+                                        }
+
+                                        @Override public void onError(String requestId, ErrorInfo error) {
+                                            Toast.makeText(getContext(), "Error al subir avatar: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override public void onStart(String requestId) {}
+                                        @Override public void onProgress(String requestId, long bytes, long totalBytes) {}
+                                        @Override public void onReschedule(String requestId, ErrorInfo error) {}
+                                    })
+                                    .dispatch();
+
                         }
                     } else {
                         Toast.makeText(getContext(), "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

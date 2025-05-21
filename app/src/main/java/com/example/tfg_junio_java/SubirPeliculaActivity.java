@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -31,8 +34,12 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        CloudinaryManager.init(getApplicationContext());
+
         setContentView(R.layout.activity_subir_pelicula);
+
 
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
@@ -69,34 +76,38 @@ public class SubirPeliculaActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("peliculas/" + UUID.randomUUID().toString() + ".jpg");
+        MediaManager.get().upload(imagenUri)
+                .callback(new UploadCallback() {
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String imagenUrl = resultData.get("secure_url").toString();
 
-        storageRef.putFile(imagenUri)
-            .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String imagenUrl = uri.toString();
+                        Map<String, Object> pelicula = new HashMap<>();
+                        pelicula.put("nombrePeli", nombrePeli);
+                        pelicula.put("sinopsis", sinopsis);
+                        pelicula.put("urlTrailer", urlTrailer);
+                        pelicula.put("imagenUrl", imagenUrl);
 
-                // Crear objeto película
-                Map<String, Object> pelicula = new HashMap<>();
-                pelicula.put("nombrePeli", nombrePeli);
-                pelicula.put("sinopsis", sinopsis);
-                pelicula.put("urlTrailer", urlTrailer);
-                pelicula.put("imagenUrl", imagenUrl);
+                        FirebaseFirestore.getInstance().collection("Peliculas")
+                                .add(pelicula)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(SubirPeliculaActivity.this, "Película guardada", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(SubirPeliculaActivity.this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                                });
+                    }
 
-                // Guardar en Firestore
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Peliculas")
-                  .add(pelicula)
-                  .addOnSuccessListener(documentReference -> {
-                      Toast.makeText(SubirPeliculaActivity.this, "Película guardada", Toast.LENGTH_SHORT).show();
-                      finish(); // Cerrar la actividad después de guardar
-                  })
-                  .addOnFailureListener(e -> {
-                      Toast.makeText(SubirPeliculaActivity.this, "Error al guardar", Toast.LENGTH_SHORT).show();
-                  });
-            }))
-            .addOnFailureListener(e -> {
-                Toast.makeText(SubirPeliculaActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
-            });
+                    @Override public void onError(String requestId, ErrorInfo error) {
+                        Toast.makeText(SubirPeliculaActivity.this, "Error al subir imagen: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override public void onStart(String requestId) {}
+                    @Override public void onProgress(String requestId, long bytes, long totalBytes) {}
+                    @Override public void onReschedule(String requestId, ErrorInfo error) {}
+                })
+                .dispatch();
+
     }
 }
