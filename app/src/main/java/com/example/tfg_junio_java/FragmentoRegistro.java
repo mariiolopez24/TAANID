@@ -1,8 +1,11 @@
 package com.example.tfg_junio_java;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +14,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -28,25 +29,26 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import android.content.pm.PackageManager;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FragmentoRegistro extends Fragment {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Uri imageUri;
+    private static final int PERMISSION_REQUEST_CODE = 1001;
 
+    private Uri imageUri;
     private FirebaseAuth mAuth;
 
     private EditText usuario, contrasenia, nombre, fechaNacimiento;
     private CheckBox checkboxAdmin;
     private Button botonAvatar, botonRegistrarse;
+
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     public FragmentoRegistro() {}
 
@@ -54,11 +56,20 @@ public class FragmentoRegistro extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        imageUri = result.getData().getData();
+                        Toast.makeText(getContext(), "Avatar seleccionado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_fragmento_registro, container, false);
 
         usuario = v.findViewById(R.id.txtUsuario);
@@ -71,26 +82,32 @@ public class FragmentoRegistro extends Fragment {
 
         CloudinaryManager.init(requireContext());
 
-
-        botonAvatar.setOnClickListener(view -> {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1001);
-            } else {
-                abrirSelectorImagen();
-            }
-        });
-
+        botonAvatar.setOnClickListener(view -> verificarPermisosYSeleccionarImagen());
         botonRegistrarse.setOnClickListener(view -> registrarUsuario());
 
         return v;
     }
 
+    private void verificarPermisosYSeleccionarImagen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE);
+            } else {
+                abrirSelectorImagen();
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            } else {
+                abrirSelectorImagen();
+            }
+        }
+    }
+
     private void abrirSelectorImagen() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Selecciona un avatar"), PICK_IMAGE_REQUEST);
+        imagePickerLauncher.launch(Intent.createChooser(intent, "Selecciona un avatar"));
     }
 
     private void registrarUsuario() {
@@ -100,13 +117,8 @@ public class FragmentoRegistro extends Fragment {
         String fechaNac = fechaNacimiento.getText().toString().trim();
         boolean esAdmin = checkboxAdmin.isChecked();
 
-        if (email.isEmpty()) {
-            Toast.makeText(getContext(), "El campo de correo electrónico es obligatorio", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (password.isEmpty()) {
-            Toast.makeText(getContext(), "El campo de contraseña es obligatorio", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(getContext(), "Correo y contraseña son obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -124,9 +136,8 @@ public class FragmentoRegistro extends Fragment {
                         }
 
                         if (!fechaNac.isEmpty()) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                             try {
-                                Date fecha = sdf.parse(fechaNac);
+                                Date fecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(fechaNac);
                                 datosUsuario.put("FechaNacimiento", new Timestamp(fecha));
                             } catch (ParseException e) {
                                 Toast.makeText(getContext(), "Formato de fecha inválido. Usa dd/MM/yyyy", Toast.LENGTH_SHORT).show();
@@ -153,14 +164,14 @@ public class FragmentoRegistro extends Fragment {
                                         @Override public void onReschedule(String requestId, ErrorInfo error) {}
                                     })
                                     .dispatch();
-
+                        } else {
+                            guardarEnFirestore(uid, datosUsuario);
                         }
                     } else {
                         Toast.makeText(getContext(), "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 
     private void guardarEnFirestore(String uid, Map<String, Object> datosUsuario) {
         FirebaseFirestore.getInstance().collection("DatosUsuario")
@@ -175,11 +186,14 @@ public class FragmentoRegistro extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            Toast.makeText(getContext(), "Avatar seleccionado", Toast.LENGTH_SHORT).show();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                abrirSelectorImagen();
+            } else {
+                Toast.makeText(getContext(), "Permiso denegado para acceder a imágenes", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

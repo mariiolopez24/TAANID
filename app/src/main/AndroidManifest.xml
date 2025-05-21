@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Permisos para acceso a imágenes -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:name=".MyApp"
@@ -16,19 +19,9 @@
 
         <activity android:name=".SubirPeliculaActivity" />
         <activity android:name=".EditarPerfilActivity" />
-
-
-        <activity
-            android:name=".FragmentActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".InicioSi"
-            android:exported="true" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".FragmentActivity" android:exported="true" />
+        <activity android:name=".InicioSi" android:exported="true" />
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

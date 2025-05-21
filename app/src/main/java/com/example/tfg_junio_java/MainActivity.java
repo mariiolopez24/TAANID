@@ -69,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 FragmentoRegistro fragmentoRegistro = new FragmentoRegistro();
-                ft.replace(android.R.id.content, fragmentoRegistro).commit();
+                ft.replace(android.R.id.content, fragmentoRegistro);
+                ft.addToBackStack(null);
+                ft.commit();
+
+
             }
         });
 

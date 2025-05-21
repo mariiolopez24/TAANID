@@ -114,11 +114,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         String nombre = editNombre.getText().toString().trim();
         String fechaStr = editFechaNacimiento.getText().toString().trim();
 
-        if (nombre.isEmpty() || fechaStr.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             Date fecha = sdf.parse(fechaStr);
