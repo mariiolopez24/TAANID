@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Pelicula implements Serializable {
 
+    private String id; // ← ID del documento en Firestore
     private String imagenUrl;
     private String nombrePeli;
     private String sinopsis;
@@ -17,6 +18,18 @@ public class Pelicula implements Serializable {
         this.sinopsis = sinopsis;
         this.urlTrailer = urlTrailer;
     }
+
+    // Nuevo constructor con ID
+    public Pelicula(String id, String imagenUrl, String nombrePeli, String sinopsis, String urlTrailer) {
+        this.id = id;
+        this.imagenUrl = imagenUrl;
+        this.nombrePeli = nombrePeli;
+        this.sinopsis = sinopsis;
+        this.urlTrailer = urlTrailer;
+    }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".EditarPeliculaActivity">
+
+    <ImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/imagen_pelicula"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnSeleccionarImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar Imagen"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#FF6600"
+        app:layout_constraintTop_toBottomOf="@id/imagePreview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Nombre"
+        android:textColor="#FF6600"
+        android:textColorHint="#FF6600"
+        android:backgroundTint="#FF6600"
+        android:inputType="textPersonName"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnSeleccionarImagen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editSinopsis"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Sinopsis"
+        android:textColor="#FF6600"
+        android:textColorHint="#FF6600"
+        android:backgroundTint="#FF6600"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/editNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editTrailer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="URL del Tráiler"
+        android:textColor="#FF6600"
+        android:textColorHint="#FF6600"
+        android:backgroundTint="#FF6600"
+        android:inputType="textUri"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/editSinopsis"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnGuardarCambios"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Guardar Cambios"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#FF6600"
+        app:layout_constraintTop_toBottomOf="@id/editTrailer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnEliminarPelicula"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Eliminar Película"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#FF0000"
+        app:layout_constraintTop_toBottomOf="@id/btnGuardarCambios"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

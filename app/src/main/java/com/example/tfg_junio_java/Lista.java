@@ -1,5 +1,7 @@
 package com.example.tfg_junio_java;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,19 +55,40 @@ public class Lista extends Fragment implements SearchView.OnQueryTextListener {
             FirebaseFirestore.getInstance().collection("usuarios").document(uid)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        boolean esAdmin = documentSnapshot.getBoolean("esAdmin") != null && documentSnapshot.getBoolean("esAdmin");
+                        Boolean adminValue = documentSnapshot.getBoolean("esAdmin");
+                        boolean esAdmin = adminValue != null && adminValue;
 
-                        // Ahora que sabemos si es admin, cargamos las películas
+                        Context context = getContext();
+                        if (context != null) {
+                            SharedPreferences prefs = context.getSharedPreferences("usuarioPrefs", Context.MODE_PRIVATE);
+                            prefs.edit().putBoolean("esAdmin", esAdmin).apply();
+                        }
+
                         cargarPeliculasDesdeFirestore(esAdmin);
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(getContext(), "Error al verificar permisos", Toast.LENGTH_SHORT).show();
-                        cargarPeliculasDesdeFirestore(false); // Por defecto, no admin
+
+                        Context context = getContext();
+                        if (context != null) {
+                            SharedPreferences prefs = context.getSharedPreferences("usuarioPrefs", Context.MODE_PRIVATE);
+                            prefs.edit().putBoolean("esAdmin", false).apply();
+                        }
+
+                        cargarPeliculasDesdeFirestore(false);
                     });
         } else {
-            cargarPeliculasDesdeFirestore(false); // Usuario no autenticado
+            Context context = getContext();
+            if (context != null) {
+                SharedPreferences prefs = context.getSharedPreferences("usuarioPrefs", Context.MODE_PRIVATE);
+                prefs.edit().putBoolean("esAdmin", false).apply();
+            }
+
+            cargarPeliculasDesdeFirestore(false);
         }
     }
+
+
 
 
 
@@ -77,6 +100,7 @@ public class Lista extends Fragment implements SearchView.OnQueryTextListener {
                     peliculas.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Pelicula pelicula = doc.toObject(Pelicula.class);
+                        pelicula.setId(doc.getId());
                         peliculas.add(pelicula);
                     }
 

@@ -91,9 +91,18 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                         FirebaseFirestore.getInstance().collection("Peliculas")
                                 .add(pelicula)
                                 .addOnSuccessListener(documentReference -> {
-                                    Toast.makeText(SubirPeliculaActivity.this, "Película guardada", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    String idGenerado = documentReference.getId();
+                                    documentReference.update("id", idGenerado)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(SubirPeliculaActivity.this, "Película guardada con ID", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(SubirPeliculaActivity.this, "Guardada, pero no se pudo actualizar el ID", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            });
                                 })
+
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(SubirPeliculaActivity.this, "Error al guardar", Toast.LENGTH_SHORT).show();
                                 });

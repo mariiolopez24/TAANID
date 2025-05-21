@@ -24,16 +24,18 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PeliculasViewHolder> implements Filterable {
 
-    final private ArrayList<Pelicula> listaPelis;
-    final private ArrayList<Pelicula> listaPelisFull;
-    final private FragmentTransaction ft;
-    private Context context;
+    private final ArrayList<Pelicula> listaPelis;
+    private final ArrayList<Pelicula> listaPelisFull;
+    private final FragmentTransaction ft;
+    private final boolean esAdmin;
+    private final Context context;
 
     public RecyclerAdapter(Context context, ArrayList<Pelicula> listaPelis, FragmentTransaction ft, boolean esAdmin) {
         this.context = context;
         this.listaPelis = listaPelis;
         this.listaPelisFull = new ArrayList<>(listaPelis);
         this.ft = ft;
+        this.esAdmin = esAdmin;
     }
 
     @NonNull
@@ -54,7 +56,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error_image)
                 .into(holder.trailer);
-
     }
 
     @Override
@@ -109,26 +110,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
             itemView.setOnClickListener(this);
         }
 
-
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Pelicula peli = listaPelis.get(position); // ← Aquí defines la variable peli correctamente
+                Pelicula peli = listaPelis.get(position);
 
-                FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(
+                FragmentTransaction nuevaTransaccion = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                nuevaTransaccion.setCustomAnimations(
                         R.anim.fade_in,
                         R.anim.fade_out,
                         R.anim.fade_in,
                         R.anim.fade_out
                 );
-
-                ft.replace(R.id.fragmentContainerView, Detalles.newInstance(peli));
-                ft.addToBackStack(null);
-                ft.commit();
+                nuevaTransaccion.replace(R.id.fragmentContainerView, Detalles.newInstance(peli, esAdmin));
+                nuevaTransaccion.addToBackStack(null);
+                nuevaTransaccion.commit();
             }
         }
-
     }
 }

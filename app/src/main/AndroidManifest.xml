@@ -19,6 +19,7 @@
 
         <activity android:name=".SubirPeliculaActivity" />
         <activity android:name=".EditarPerfilActivity" />
+        <activity android:name=".EditarPeliculaActivity" />
         <activity android:name=".FragmentActivity" android:exported="true" />
         <activity android:name=".InicioSi" android:exported="true" />
         <activity android:name=".MainActivity" android:exported="true">
