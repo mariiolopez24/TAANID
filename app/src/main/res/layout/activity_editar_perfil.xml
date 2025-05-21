@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageAvatar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/avatar_profile_vector"
+            android:scaleType="centerCrop"
+            android:background="@drawable/avatar_profile_vector" />
+
+        <Button
+            android:id="@+id/btnCambiarAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cambiar Avatar"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF6600"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:textColor="#FF6600"
+            android:textColorHint="#FF6600"
+            android:backgroundTint="#FF6600"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editFechaNacimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de nacimiento (dd/MM/yyyy)"
+            android:textColor="#FF6600"
+            android:textColorHint="#FF6600"
+            android:backgroundTint="#FF6600"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnGuardarCambios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar Cambios"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF6600" />
+    </LinearLayout>
+</ScrollView>

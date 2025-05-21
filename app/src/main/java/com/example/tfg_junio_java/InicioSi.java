@@ -1,22 +1,30 @@
 package com.example.tfg_junio_java;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class InicioSi extends AppCompatActivity {
+
+    private static final int EDITAR_PERFIL_REQUEST = 1001;
+    private ImageView avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +37,54 @@ public class InicioSi extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ImageView avatar = findViewById(R.id.avatarToolbar);
+        avatar = findViewById(R.id.avatarToolbar);
+
         avatar.setOnClickListener(v -> {
-            // Mostrar opciones para editar o borrar usuario
+            View popupView = LayoutInflater.from(this).inflate(R.layout.dialog_avatar_menu, null);
+
+            PopupWindow popupWindow = new PopupWindow(
+                    popupView,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    true
+            );
+
+            Button btnEditarPerfil = popupView.findViewById(R.id.btnEditarPerfil);
+            Button btnCerrarSesion = popupView.findViewById(R.id.btnCerrarSesion);
+
+            btnEditarPerfil.setOnClickListener(view -> {
+                popupWindow.dismiss();
+                Intent intent = new Intent(InicioSi.this, EditarPerfilActivity.class);
+                startActivityForResult(intent, EDITAR_PERFIL_REQUEST);
+            });
+
+            btnCerrarSesion.setOnClickListener(view -> {
+                popupWindow.dismiss();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(InicioSi.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            });
+
+            // Posicionar el popup justo encima del avatar
+            int[] location = new int[2];
+            v.getLocationOnScreen(location);
+            popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int popupHeight = popupView.getMeasuredHeight();
+            int xOffset = -popupView.getMeasuredWidth() + v.getWidth(); // alineado a la derecha
+            int yOffset = -popupHeight; // justo encima
+
+            popupWindow.showAsDropDown(v, xOffset, yOffset);
         });
 
+        cargarDatosUsuario(btnSubir);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Lista lista = new Lista();
+        ft.replace(R.id.fragmentContainerView, lista).commit();
+    }
 
-
-
+    private void cargarDatosUsuario(Button btnSubir) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String uid = user.getUid();
@@ -53,21 +100,53 @@ public class InicioSi extends AppCompatActivity {
                                 Intent intent = new Intent(InicioSi.this, SubirPeliculaActivity.class);
                                 startActivity(intent);
                             });
-                        }else {
+                        } else {
                             btnSubir.setVisibility(View.GONE);
+                        }
+
+                        // Cargar avatar
+                        String avatarUrl = documentSnapshot.getString("Avatar");
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(avatarUrl)
+                                    .placeholder(R.drawable.avatar_profile_vector)
+                                    .circleCrop()
+                                    .into(avatar);
                         }
                     })
                     .addOnFailureListener(e -> {
                         Log.e("ADMIN_CHECK", "Error al obtener documento", e);
                     });
         }
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Lista lista = new Lista();
-        ft.replace(R.id.fragmentContainerView, lista).commit();
     }
 
+    private void recargarAvatar() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance().collection("DatosUsuario")
+                    .document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        String avatarUrl = documentSnapshot.getString("Avatar");
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(avatarUrl)
+                                    .placeholder(R.drawable.avatar_profile_vector)
+                                    .circleCrop()
+                                    .into(avatar);
+                        }
+                    });
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDITAR_PERFIL_REQUEST) {
+            recargarAvatar();
+            Toast.makeText(this, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -77,6 +156,4 @@ public class InicioSi extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
 }
-
