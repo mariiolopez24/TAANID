@@ -1,19 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.TFGJunioJava" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
+    <!-- Tema principal de la app -->
+    <style name="Theme.TFGJunioJava" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Disable ActionBar and Title for compatibility with Toolbar -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Overlay para SearchView -->
+    <style name="ThemeOverlay.TFG.SearchView" parent="ThemeOverlay.Material3.Search">
+        <item name="searchViewStyle">@style/Widget.TFG.SearchView</item>
+    </style>
+
+    <!-- Estilo personalizado para SearchView -->
+    <style name="Widget.TFG.SearchView" parent="Widget.Material3.SearchView">
+        <item name="android:background">@drawable/searchview_background</item>
+        <item name="android:textColorHint">@color/orange</item>
+        <item name="android:textColor">@color/orange</item>
     </style>
 </resources>

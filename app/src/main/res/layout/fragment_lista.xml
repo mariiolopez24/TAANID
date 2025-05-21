@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFA600"
+    android:orientation="vertical"
     tools:context=".Lista">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search"
+    <!-- SearchBar visible en la parte superior -->
+    <EditText
+        android:id="@+id/search_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF6600" />
+        android:background="#000000"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:foregroundTint="#FF6600"
+        android:hint="Buscar por título o sinopsis"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="@color/orange"
+        android:textColorHint="@color/orange" />
 
+
+    <!-- SearchView que se muestra al hacer clic en el SearchBar -->
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/ThemeOverlay.TFG.SearchView"
+        android:visibility="gone"
+        app:layout_behavior="@string/search_view_behavior" />
+
+    <!-- RecyclerView para mostrar la lista de películas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPelis"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#000000" />
-</FrameLayout>
+</LinearLayout>

@@ -78,10 +78,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
                 listaFiltrada.addAll(listaPelisFull);
             } else {
                 for (Pelicula peli : listaPelisFull) {
-                    if (peli.getNombrePeli().toLowerCase().contains(filterPattern)) {
+                    String titulo = peli.getNombrePeli() != null ? peli.getNombrePeli().toLowerCase() : "";
+                    String sinopsis = peli.getSinopsis() != null ? peli.getSinopsis().toLowerCase() : "";
+
+                    if (titulo.contains(filterPattern) || sinopsis.contains(filterPattern)) {
                         listaFiltrada.add(peli);
                     }
                 }
+
             }
 
             FilterResults results = new FilterResults();
