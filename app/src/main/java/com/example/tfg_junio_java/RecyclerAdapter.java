@@ -2,7 +2,7 @@
 package com.example.tfg_junio_java;
 
 import android.content.Context;
-import android.content.Intent;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Button;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +24,9 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PeliculasViewHolder> implements Filterable {
 
-    private ArrayList<Pelicula> listaPelis;
-    private ArrayList<Pelicula> listaPelisFull;
-    private FragmentTransaction ft;
+    final private ArrayList<Pelicula> listaPelis;
+    final private ArrayList<Pelicula> listaPelisFull;
+    final private FragmentTransaction ft;
     private Context context;
 
     public RecyclerAdapter(Context context, ArrayList<Pelicula> listaPelis, FragmentTransaction ft, boolean esAdmin) {
@@ -118,11 +118,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
 
                 FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(
-                        android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right,
-                        android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right
+                        R.anim.fade_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.fade_out
                 );
+
                 ft.replace(R.id.fragmentContainerView, Detalles.newInstance(peli));
                 ft.addToBackStack(null);
                 ft.commit();

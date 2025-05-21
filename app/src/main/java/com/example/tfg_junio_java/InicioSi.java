@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +29,11 @@ public class InicioSi extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            boolean canGoBack = getSupportFragmentManager().getBackStackEntryCount() > 0;
-            getSupportActionBar().setDisplayHomeAsUpEnabled(canGoBack);
+        ImageView avatar = findViewById(R.id.avatarToolbar);
+        avatar.setOnClickListener(v -> {
+            // Mostrar opciones para editar o borrar usuario
         });
+
 
 
 
@@ -64,11 +67,6 @@ public class InicioSi extends AppCompatActivity {
         ft.replace(R.id.fragmentContainerView, lista).commit();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        getSupportFragmentManager().popBackStack();
-        return true;
-    }
 
 
     @Override
