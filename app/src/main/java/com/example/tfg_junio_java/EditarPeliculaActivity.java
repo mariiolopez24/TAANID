@@ -26,7 +26,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText editNombre, editSinopsis, editTrailer;
+    private EditText editNombre, editSinopsis, editTrailer, editUrlPelicula;
     private ImageView imagePreview;
     private Uri imagenUri;
     private Pelicula pelicula;
@@ -44,6 +44,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
         editTrailer = findViewById(R.id.editTrailer);
+        editUrlPelicula = findViewById(R.id.editUrlPelicula);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen);
         Button btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
@@ -54,6 +55,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
             editNombre.setText(pelicula.getNombrePeli());
             editSinopsis.setText(pelicula.getSinopsis());
             editTrailer.setText(pelicula.getUrlTrailer());
+            editUrlPelicula.setText(pelicula.getUrlPelicula());
 
             Glide.with(this)
                     .load(pelicula.getImagenUrl())
@@ -83,8 +85,9 @@ public class EditarPeliculaActivity extends AppCompatActivity {
         String nombrePeli = editNombre.getText().toString().trim();
         String sinopsis = editSinopsis.getText().toString().trim();
         String urlTrailer = editTrailer.getText().toString().trim();
+        String urlPelicula = editUrlPelicula.getText().toString().trim();
 
-        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty()) {
+        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty()) {
             Toast.makeText(this, "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -93,6 +96,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
         peliculaActualizada.put("nombrePeli", nombrePeli);
         peliculaActualizada.put("sinopsis", sinopsis);
         peliculaActualizada.put("urlTrailer", urlTrailer);
+        peliculaActualizada.put("urlPelicula", urlPelicula);
 
         if (imagenUri != null) {
             MediaManager.get().upload(imagenUri)

@@ -21,4 +21,5 @@
         <item name="android:textColorHint">@color/orange</item>
         <item name="android:textColor">@color/orange</item>
     </style>
+
 </resources>

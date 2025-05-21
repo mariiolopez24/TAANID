@@ -17,18 +17,15 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class SubirPeliculaActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText editNombre, editSinopsis, editTrailer;
+    private EditText editNombre, editSinopsis, editTrailer, editUrlPelicula;
     private ImageView imagePreview;
     private Uri imagenUri;
 
@@ -40,10 +37,10 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_subir_pelicula);
 
-
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
         editTrailer = findViewById(R.id.editTrailer);
+        editUrlPelicula = findViewById(R.id.editUrlPelicula);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen);
         Button btnSubirPelicula = findViewById(R.id.btnSubirPelicula);
@@ -70,8 +67,9 @@ public class SubirPeliculaActivity extends AppCompatActivity {
         String nombrePeli = editNombre.getText().toString().trim();
         String sinopsis = editSinopsis.getText().toString().trim();
         String urlTrailer = editTrailer.getText().toString().trim();
+        String urlPelicula = editUrlPelicula.getText().toString().trim();
 
-        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || imagenUri == null) {
+        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty() || imagenUri == null) {
             Toast.makeText(this, "Por favor, completa todos los campos y selecciona una imagen.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -86,6 +84,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                         pelicula.put("nombrePeli", nombrePeli);
                         pelicula.put("sinopsis", sinopsis);
                         pelicula.put("urlTrailer", urlTrailer);
+                        pelicula.put("urlPelicula", urlPelicula);
                         pelicula.put("imagenUrl", imagenUrl);
 
                         FirebaseFirestore.getInstance().collection("Peliculas")

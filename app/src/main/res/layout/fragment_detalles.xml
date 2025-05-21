@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -42,6 +42,33 @@
                 android:lineSpacingExtra="4dp" />
 
             <Button
+                android:id="@+id/btnVerTrailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#FF6600"
+                android:text="Ver Tráiler"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnVerPelicula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#FF6600"
+                android:text="Ver Película"
+                android:textColor="@android:color/white" />
+
+            <WebView
+                android:id="@+id/webViewPelicula"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/btnEditarPelicula"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,6 +78,7 @@
                 android:text="Editar Película"
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

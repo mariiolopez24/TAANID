@@ -1,5 +1,6 @@
 package com.example.tfg_junio_java;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
@@ -150,10 +152,50 @@ public class InicioSi extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        boolean esAnonimo = user != null && user.isAnonymous();
+
+        if (currentFragment instanceof Lista) {
+            if (!esAnonimo) {
+                // Mostrar diálogo personalizado solo si el usuario está registrado
+                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirmacion, null);
+
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setView(dialogView)
+                        .create();
+
+                Button btnAceptar = dialogView.findViewById(R.id.btnAceptar);
+                Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
+
+                btnAceptar.setOnClickListener(v -> {
+                    dialog.dismiss();
+                    irAlLogin();
+                });
+
+                btnCancelar.setOnClickListener(v -> dialog.dismiss());
+
+                dialog.show();
+            } else {
+                // Usuario anónimo: ir directamente al login
+                irAlLogin();
+            }
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
     }
+
+    private void irAlLogin() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+
+
+
+
 }
