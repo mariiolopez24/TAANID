@@ -1,9 +1,12 @@
+
 package com.example.tfg_junio_java;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.cloudinary.android.MediaManager;
@@ -36,6 +40,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private ImageView imageAvatar;
     private Uri nuevaImagenUri;
     private String avatarActualUrl;
+    private String nombreOriginal;
+    private String fechaNacimientoOriginal;
+    private Button btnGuardarCambios;
+    private boolean datosCargados = false;
+    private boolean ignorarCambios = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +57,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
         editFechaNacimiento = findViewById(R.id.editFechaNacimiento);
         imageAvatar = findViewById(R.id.imageAvatar);
         Button btnCambiarAvatar = findViewById(R.id.btnCambiarAvatar);
-        Button btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
+        btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
+
+        btnGuardarCambios.setEnabled(false); // Desactivado por defecto
 
         cargarDatosUsuario();
 
@@ -57,26 +68,37 @@ public class EditarPerfilActivity extends AppCompatActivity {
         editFechaNacimiento.setOnClickListener(v -> mostrarSelectorFecha());
 
         btnGuardarCambios.setOnClickListener(v -> guardarCambios());
+
+        editNombre.addTextChangedListener(textWatcher);
+        editFechaNacimiento.addTextChangedListener(textWatcher);
     }
 
     private void cargarDatosUsuario() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
+        ignorarCambios = true; // Desactiva el watcher temporalmente
+
         FirebaseFirestore.getInstance().collection("DatosUsuario")
                 .document(user.getUid())
                 .get()
                 .addOnSuccessListener(document -> {
                     if (document.exists()) {
-                        editNombre.setText(document.getString("Nombre"));
+                        String nombre = document.getString("Nombre");
+                        editNombre.setText(nombre);
+                        nombreOriginal = nombre;
+
                         if (document.contains("FechaNacimiento")) {
                             com.google.firebase.Timestamp timestamp = document.getTimestamp("FechaNacimiento");
                             if (timestamp != null) {
                                 Date fecha = timestamp.toDate();
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                                editFechaNacimiento.setText(sdf.format(fecha));
+                                String fechaFormateada = sdf.format(fecha);
+                                editFechaNacimiento.setText(fechaFormateada);
+                                fechaNacimientoOriginal = fechaFormateada;
                             }
                         }
+
                         avatarActualUrl = document.getString("Avatar");
                         if (avatarActualUrl != null && !avatarActualUrl.isEmpty()) {
                             Glide.with(this)
@@ -84,6 +106,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
                                     .circleCrop()
                                     .into(imageAvatar);
                         }
+
+                        datosCargados = true;
+                        ignorarCambios = false; // Reactiva el watcher
+                        verificarCambios(); // Verifica si hay cambios reales
                     }
                 });
     }
@@ -108,21 +134,32 @@ public class EditarPerfilActivity extends AppCompatActivity {
     }
 
     private void guardarCambios() {
+        if (!datosCargados) return; // Evita guardar si los datos aún no se han cargado
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
         String nombre = editNombre.getText().toString().trim();
         String fechaStr = editFechaNacimiento.getText().toString().trim();
 
+        boolean nombreCambiado = !nombre.equals(nombreOriginal);
+        boolean fechaCambiada = !fechaStr.equals(fechaNacimientoOriginal);
+        boolean avatarCambiado = nuevaImagenUri != null;
+
+        if (!nombreCambiado && !fechaCambiada && !avatarCambiado) {
+            Toast.makeText(this, "No se realizaron cambios", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             Date fecha = sdf.parse(fechaStr);
 
             Map<String, Object> datos = new HashMap<>();
-            datos.put("Nombre", nombre);
-            datos.put("FechaNacimiento", new com.google.firebase.Timestamp(fecha));
+            if (nombreCambiado) datos.put("Nombre", nombre);
+            if (fechaCambiada) datos.put("FechaNacimiento", new com.google.firebase.Timestamp(fecha));
 
-            if (nuevaImagenUri != null) {
+            if (avatarCambiado) {
                 MediaManager.get().upload(nuevaImagenUri)
                         .callback(new UploadCallback() {
                             @Override
@@ -142,7 +179,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         })
                         .dispatch();
             } else {
-                guardarEnFirestore(user.getUid(), datos);
+                if (datos.isEmpty()) {
+                    Toast.makeText(this, "No se realizaron cambios", Toast.LENGTH_SHORT).show();
+                } else {
+                    guardarEnFirestore(user.getUid(), datos);
+                }
             }
 
         } catch (Exception e) {
@@ -169,6 +210,35 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             nuevaImagenUri = data.getData();
             imageAvatar.setImageURI(nuevaImagenUri);
+            verificarCambios();
         }
     }
+
+    private void verificarCambios() {
+        String nombreActual = editNombre.getText().toString().trim();
+        String fechaActual = editFechaNacimiento.getText().toString().trim();
+
+        boolean nombreCambiado = !nombreActual.equals(nombreOriginal);
+        boolean fechaCambiada = !fechaActual.equals(fechaNacimientoOriginal);
+        boolean avatarCambiado = nuevaImagenUri != null;
+
+        btnGuardarCambios.setEnabled(nombreCambiado || fechaCambiada || avatarCambiado);
+        btnGuardarCambios.setBackgroundTintList(ContextCompat.getColorStateList(this,
+                btnGuardarCambios.isEnabled() ? R.color.orange : R.color.grisClaro));
+    }
+
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!ignorarCambios) {
+                verificarCambios();
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+    };
 }

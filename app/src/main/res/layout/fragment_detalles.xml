@@ -1,4 +1,3 @@
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,23 +17,24 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:id="@+id/imagendetalles"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/imagen_pelicula" />
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/estrellaFavoritoDetalles"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/ic_star_border"
-                    android:contentDescription="Favorito" />
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="Favorito"
+                    android:src="@drawable/ic_star_border" />
+
+                <ImageView
+                    android:id="@+id/imagendetalles"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@id/estrellaFavoritoDetalles"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/imagen_pelicula" />
             </RelativeLayout>
 
             <TextView

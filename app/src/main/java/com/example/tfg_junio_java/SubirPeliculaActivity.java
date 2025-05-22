@@ -1,4 +1,3 @@
-
 package com.example.tfg_junio_java;
 
 import android.content.Intent;
@@ -31,10 +30,8 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         CloudinaryManager.init(getApplicationContext());
-
         setContentView(R.layout.activity_subir_pelicula);
 
         editNombre = findViewById(R.id.editNombre);
@@ -46,7 +43,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
         Button btnSubirPelicula = findViewById(R.id.btnSubirPelicula);
 
         btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
-        btnSubirPelicula.setOnClickListener(v -> subirPelicula());
+        btnSubirPelicula.setOnClickListener(v -> verificarCamposYSubir());
     }
 
     private void abrirGaleria() {
@@ -63,7 +60,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
         }
     }
 
-    private void subirPelicula() {
+    private void verificarCamposYSubir() {
         String nombrePeli = editNombre.getText().toString().trim();
         String sinopsis = editSinopsis.getText().toString().trim();
         String urlTrailer = editTrailer.getText().toString().trim();
@@ -74,6 +71,29 @@ public class SubirPeliculaActivity extends AppCompatActivity {
             return;
         }
 
+        FirebaseFirestore.getInstance().collection("Peliculas")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    boolean existeDuplicado = queryDocumentSnapshots.getDocuments().stream().anyMatch(doc ->
+                            nombrePeli.equalsIgnoreCase(doc.getString("nombrePeli")) ||
+                                    sinopsis.equalsIgnoreCase(doc.getString("sinopsis")) ||
+                                    urlTrailer.equalsIgnoreCase(doc.getString("urlTrailer")) ||
+                                    urlPelicula.equalsIgnoreCase(doc.getString("urlPelicula"))
+                    );
+
+                    if (existeDuplicado) {
+                        Toast.makeText(this, "Ya existe una película con alguno de esos datos.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        subirImagenYGuardarPelicula(nombrePeli, sinopsis, urlTrailer, urlPelicula);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al verificar duplicados.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
+    private void subirImagenYGuardarPelicula(String nombrePeli, String sinopsis, String urlTrailer, String urlPelicula) {
         MediaManager.get().upload(imagenUri)
                 .callback(new UploadCallback() {
                     @Override
@@ -93,7 +113,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                                     String idGenerado = documentReference.getId();
                                     documentReference.update("id", idGenerado)
                                             .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(SubirPeliculaActivity.this, "Película guardada con ID", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SubirPeliculaActivity.this, "Película guardada", Toast.LENGTH_SHORT).show();
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> {
@@ -101,7 +121,6 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                                                 finish();
                                             });
                                 })
-
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(SubirPeliculaActivity.this, "Error al guardar", Toast.LENGTH_SHORT).show();
                                 });
@@ -116,6 +135,5 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                     @Override public void onReschedule(String requestId, ErrorInfo error) {}
                 })
                 .dispatch();
-
     }
 }
