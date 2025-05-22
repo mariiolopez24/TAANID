@@ -1,3 +1,4 @@
+
 package com.example.tfg_junio_java;
 
 import android.os.Bundle;
@@ -6,17 +7,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,14 +27,14 @@ public class Lista extends Fragment {
 
     private ArrayList<Pelicula> peliculas;
     private RecyclerView recyclerLista;
-    private SearchBar searchBar;
-    private SearchView searchView;
     private RecyclerAdapter adapter;
+    private EditText searchInput;
+    private Button btnFiltrarFavoritos;
+    private boolean mostrandoFavoritos = false;
 
     public Lista() {
         peliculas = new ArrayList<>();
     }
-    private EditText searchInput;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +43,7 @@ public class Lista extends Fragment {
 
         recyclerLista = view.findViewById(R.id.recyclerPelis);
         searchInput = view.findViewById(R.id.search_input);
+        btnFiltrarFavoritos = view.findViewById(R.id.btnFiltrarFavoritos);
 
         recyclerLista.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -62,6 +62,17 @@ public class Lista extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        btnFiltrarFavoritos.setOnClickListener(v -> {
+            mostrandoFavoritos = !mostrandoFavoritos;
+            if (mostrandoFavoritos) {
+                cargarFavoritosDesdeFirestore();
+                btnFiltrarFavoritos.setText("Mostrar Todas");
+            } else {
+                verificarSiEsAdminYMostrarPeliculas();
+                btnFiltrarFavoritos.setText("Mostrar Favoritos");
             }
         });
 
@@ -114,5 +125,35 @@ public class Lista extends Fragment {
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Error al cargar películas", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void cargarFavoritosDesdeFirestore() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            FirebaseFirestore.getInstance().collection("DatosUsuario").document(uid)
+                    .collection("Favoritos")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        peliculas.clear();
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            Pelicula pelicula = doc.toObject(Pelicula.class);
+                            if (pelicula != null) {
+                                pelicula.setId(doc.getId());
+                                peliculas.add(pelicula);
+                            }
+                        }
+
+                        if (isAdded()) {
+                            FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                            adapter = new RecyclerAdapter(getContext(), peliculas, ft, false);
+                            recyclerLista.setAdapter(adapter);
+                        }
+
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Error al cargar favoritos", Toast.LENGTH_SHORT).show();
+                    });
+        }
     }
 }

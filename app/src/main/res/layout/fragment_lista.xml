@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFA600"
+    android:background="#000000"
     android:orientation="vertical"
     tools:context=".Lista">
 
@@ -23,6 +23,16 @@
         android:textColor="@color/orange"
         android:textColorHint="@color/orange" />
 
+    <!-- Botón para mostrar favoritos -->
+    <Button
+        android:id="@+id/btnFiltrarFavoritos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#FF6600"
+        android:text="Mostrar Favoritos"
+        android:textColor="@android:color/white" />
 
     <!-- SearchView que se muestra al hacer clic en el SearchBar -->
     <com.google.android.material.search.SearchView
@@ -31,7 +41,7 @@
         android:layout_height="match_parent"
         android:theme="@style/ThemeOverlay.TFG.SearchView"
         android:visibility="gone"
-        app:layout_behavior="@string/search_view_behavior" />
+        app:layout_behavior="@string/avatar_usuario" />
 
     <!-- RecyclerView para mostrar la lista de películas -->
     <androidx.recyclerview.widget.RecyclerView

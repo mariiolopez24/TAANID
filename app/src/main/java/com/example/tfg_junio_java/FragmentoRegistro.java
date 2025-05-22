@@ -122,56 +122,69 @@ public class FragmentoRegistro extends Fragment {
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.fetchSignInMethodsForEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        String uid = user.getUid();
-
-                        Map<String, Object> datosUsuario = new HashMap<>();
-                        datosUsuario.put("admin", esAdmin);
-
-                        if (!nombreUsuario.isEmpty()) {
-                            datosUsuario.put("Nombre", nombreUsuario);
-                        }
-
-                        if (!fechaNac.isEmpty()) {
-                            try {
-                                Date fecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(fechaNac);
-                                datosUsuario.put("FechaNacimiento", new Timestamp(fecha));
-                            } catch (ParseException e) {
-                                Toast.makeText(getContext(), "Formato de fecha inválido. Usa dd/MM/yyyy", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-
-                        if (imageUri != null) {
-                            MediaManager.get().upload(imageUri)
-                                    .callback(new UploadCallback() {
-                                        @Override
-                                        public void onSuccess(String requestId, Map resultData) {
-                                            String imageUrl = resultData.get("secure_url").toString();
-                                            datosUsuario.put("Avatar", imageUrl);
-                                            guardarEnFirestore(uid, datosUsuario);
-                                        }
-
-                                        @Override public void onError(String requestId, ErrorInfo error) {
-                                            Toast.makeText(getContext(), "Error al subir avatar: " + error.getDescription(), Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        @Override public void onStart(String requestId) {}
-                                        @Override public void onProgress(String requestId, long bytes, long totalBytes) {}
-                                        @Override public void onReschedule(String requestId, ErrorInfo error) {}
-                                    })
-                                    .dispatch();
+                        boolean emailEnUso = !task.getResult().getSignInMethods().isEmpty();
+                        if (emailEnUso) {
+                            Toast.makeText(getContext(), "Este correo ya está registrado", Toast.LENGTH_SHORT).show();
                         } else {
-                            guardarEnFirestore(uid, datosUsuario);
+                            mAuth.createUserWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(registroTask -> {
+                                        if (registroTask.isSuccessful()) {
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            String uid = user.getUid();
+
+                                            Map<String, Object> datosUsuario = new HashMap<>();
+                                            datosUsuario.put("admin", esAdmin);
+
+                                            if (!nombreUsuario.isEmpty()) {
+                                                datosUsuario.put("Nombre", nombreUsuario);
+                                            }
+
+                                            if (!fechaNac.isEmpty()) {
+                                                try {
+                                                    Date fecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(fechaNac);
+                                                    datosUsuario.put("FechaNacimiento", new Timestamp(fecha));
+                                                } catch (ParseException e) {
+                                                    Toast.makeText(getContext(), "Formato de fecha inválido. Usa dd/MM/yyyy", Toast.LENGTH_SHORT).show();
+                                                    return;
+                                                }
+                                            }
+
+                                            if (imageUri != null) {
+                                                MediaManager.get().upload(imageUri)
+                                                        .callback(new UploadCallback() {
+                                                            @Override
+                                                            public void onSuccess(String requestId, Map resultData) {
+                                                                String imageUrl = resultData.get("secure_url").toString();
+                                                                datosUsuario.put("Avatar", imageUrl);
+                                                                guardarEnFirestore(uid, datosUsuario);
+                                                            }
+
+                                                            @Override public void onError(String requestId, ErrorInfo error) {
+                                                                Toast.makeText(getContext(), "Error al subir avatar: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                                                            }
+
+                                                            @Override public void onStart(String requestId) {}
+                                                            @Override public void onProgress(String requestId, long bytes, long totalBytes) {}
+                                                            @Override public void onReschedule(String requestId, ErrorInfo error) {}
+                                                        })
+                                                        .dispatch();
+                                            } else {
+                                                guardarEnFirestore(uid, datosUsuario);
+                                            }
+                                        } else {
+                                            Toast.makeText(getContext(), "Error al registrar: " + registroTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
                     } else {
-                        Toast.makeText(getContext(), "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error al verificar el correo: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 
     private void guardarEnFirestore(String uid, Map<String, Object> datosUsuario) {
         FirebaseFirestore.getInstance().collection("DatosUsuario")

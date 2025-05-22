@@ -33,11 +33,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#FF6600"
+        android:clickable="true"
         android:hint="@string/fechaNac"
-        android:inputType="datetime"
+        android:inputType="datetime|date"
         android:padding="16dp"
         android:textColor="#FF6600"
         android:textColorHint="#FF6600"
@@ -62,15 +63,36 @@
         android:id="@+id/checkboxAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:buttonTint="#FF6600"
         android:text="¿Es administrador?"
         android:textColor="#FF6600"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtFechaNacimiento" />
+
+    <Button
+        android:id="@+id/botonAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#FF6600"
+        android:text="@string/botonAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxAdmin" />
+
+    <Button
+        android:id="@+id/botonRegistrarse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#FF6600"
+        android:text="@string/botonRegistro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonAvatar" />
 
     <EditText
         android:id="@+id/txtNombre"
@@ -89,29 +111,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtContraseña" />
-
-    <Button
-        android:id="@+id/botonAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="#FF6600"
-        android:text="@string/botonAvatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkboxAdmin" />
-
-    <Button
-        android:id="@+id/botonRegistrarse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#FF6600"
-        android:text="@string/botonRegistro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/botonAvatar" />
 
     <EditText
         android:id="@+id/txtContraseña"
@@ -143,19 +142,7 @@
         app:layout_constraintTop_toTopOf="@id/txtUsuario"
         app:layout_constraintVertical_bias="0.6" />
 
-    <!-- Contraseña -->
 
-    <!-- Nombre -->
-
-    <!-- Fecha de nacimiento -->
-
-    <!-- Checkbox admin -->
-
-    <!-- Botón avatar -->
-
-    <!-- Botón registrarse -->
-
-    <!-- Leyenda asterisco -->
     <TextView
         android:id="@+id/leyendaAsterisco"
         android:layout_width="wrap_content"

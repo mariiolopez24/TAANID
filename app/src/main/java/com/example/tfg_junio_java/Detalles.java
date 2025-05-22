@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Detalles extends Fragment {
 
@@ -69,6 +70,7 @@ public class Detalles extends Fragment {
         btnVerTrailer = view.findViewById(R.id.btnVerTrailer);
         btnVerPelicula = view.findViewById(R.id.btnVerPelicula);
         webView = view.findViewById(R.id.webViewPelicula);
+        ImageView estrellaFavorito = view.findViewById(R.id.estrellaFavoritoDetalles);
 
         if (pelicula != null) {
             textTitulo.setText(pelicula.getNombrePeli());
@@ -119,6 +121,36 @@ public class Detalles extends Fragment {
             } else {
                 Toast.makeText(getContext(), "Debes iniciar sesión para ver la película completa", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        estrellaFavorito.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user == null || user.isAnonymous()) {
+                Toast.makeText(getContext(), "Debes iniciar sesión para añadir a favoritos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String uid = user.getUid();
+            String peliId = pelicula.getId();
+
+            db.collection("DatosUsuario").document(uid)
+                    .collection("Favoritos").document(peliId)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        if (snapshot.exists()) {
+                            db.collection("DatosUsuario").document(uid)
+                                    .collection("Favoritos").document(peliId)
+                                    .delete();
+                            estrellaFavorito.setImageResource(R.drawable.ic_star_border);
+                        } else {
+                            db.collection("DatosUsuario").document(uid)
+                                    .collection("Favoritos").document(peliId)
+                                    .set(pelicula);
+                            estrellaFavorito.setImageResource(R.drawable.ic_star_filled);
+                        }
+                    });
         });
 
         return view;

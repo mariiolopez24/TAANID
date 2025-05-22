@@ -2,7 +2,6 @@
 package com.example.tfg_junio_java;
 
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +17,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
     private final FragmentTransaction ft;
     private final boolean esAdmin;
     private final Context context;
+    private FirebaseUser user;
 
     public RecyclerAdapter(Context context, ArrayList<Pelicula> listaPelis, FragmentTransaction ft, boolean esAdmin) {
         this.context = context;
@@ -56,6 +60,53 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error_image)
                 .into(holder.trailer);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("DatosUsuario")
+                    .document(user.getUid())
+                    .collection("Favoritos")
+                    .document(peli.getId())
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        if (snapshot.exists()) {
+                            holder.estrella.setImageResource(R.drawable.ic_star_filled); // naranja
+                        } else {
+                            holder.estrella.setImageResource(R.drawable.ic_star_border); // blanca
+                        }
+                    });
+        }
+
+        holder.estrella.setOnClickListener(v -> {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user == null || user.isAnonymous()) {
+                Toast.makeText(context, "Debes iniciar sesión para añadir a favoritos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String uid = user.getUid();
+            String peliId = peli.getId();
+
+            db.collection("DatosUsuario").document(uid)
+                    .collection("Favoritos").document(peliId)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        if (snapshot.exists()) {
+                            db.collection("DatosUsuario").document(uid)
+                                    .collection("Favoritos").document(peliId)
+                                    .delete();
+                            holder.estrella.setImageResource(R.drawable.ic_star_border);
+                        } else {
+                            db.collection("DatosUsuario").document(uid)
+                                    .collection("Favoritos").document(peliId)
+                                    .set(peli);
+                            holder.estrella.setImageResource(R.drawable.ic_star_filled);
+                        }
+                    });
+        });
     }
 
     @Override
@@ -105,12 +156,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
         private final TextView titulo;
         private final TextView detalle;
         private final ImageView trailer;
+        public final ImageView estrella;
 
         public PeliculasViewHolder(@NonNull View itemView) {
             super(itemView);
             titulo = itemView.findViewById(R.id.textTitulo);
             detalle = itemView.findViewById(R.id.textDetalles);
             trailer = itemView.findViewById(R.id.imageTrailer);
+            estrella = itemView.findViewById(R.id.estrellaFavorito);
             itemView.setOnClickListener(this);
         }
 

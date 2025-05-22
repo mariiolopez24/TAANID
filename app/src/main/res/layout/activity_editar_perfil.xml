@@ -14,7 +14,6 @@
         android:layout_height="100dp"
         android:layout_marginTop="120dp"
         android:background="@drawable/avatar_profile_vector"
-        android:contentDescription="@string/avatar_usuario"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

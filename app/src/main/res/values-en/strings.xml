@@ -22,6 +22,5 @@
     <string name="aviso2">The user is already registered</string>
     <string name="login_error">Incorrect username or password</string>
     <string name="imagen_pelicula">Picture of the movie</string>
-    <string name="avatar_usuario">try</string>
-    <string name="search_view_behavior">Prueba</string>
+    <string name="avatar_usuario">Avatar del usuario</string>
 </resources>
