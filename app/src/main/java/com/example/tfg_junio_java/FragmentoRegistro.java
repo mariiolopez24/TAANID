@@ -117,8 +117,8 @@ public class FragmentoRegistro extends Fragment {
         String fechaNac = fechaNacimiento.getText().toString().trim();
         boolean esAdmin = checkboxAdmin.isChecked();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Correo y contraseña son obligatorios", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty() || nombreUsuario.isEmpty()) {
+            Toast.makeText(getContext(), "Correo, nombre y contraseña son obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -2,13 +2,21 @@
 package com.example.tfg_junio_java;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.webkit.WebSettings;
@@ -20,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Detalles extends Fragment {
@@ -37,6 +46,10 @@ public class Detalles extends Fragment {
     private Button btnVerTrailer;
     private Button btnVerPelicula;
     private WebView webView;
+    private EditText editComentario;
+    private Button btnEnviarComentario;
+    private LinearLayout layoutComentarios;
+    private RatingBar ratingBar;
 
     public Detalles() {}
 
@@ -71,6 +84,10 @@ public class Detalles extends Fragment {
         btnVerPelicula = view.findViewById(R.id.btnVerPelicula);
         webView = view.findViewById(R.id.webViewPelicula);
         ImageView estrellaFavorito = view.findViewById(R.id.estrellaFavoritoDetalles);
+        editComentario = view.findViewById(R.id.editComentario);
+        btnEnviarComentario = view.findViewById(R.id.btnEnviarComentario);
+        layoutComentarios = view.findViewById(R.id.layoutComentarios);
+        ratingBar = view.findViewById(R.id.ratingBar);
 
         if (pelicula != null) {
             textTitulo.setText(pelicula.getNombrePeli());
@@ -153,6 +170,91 @@ public class Detalles extends Fragment {
                     });
         });
 
+        btnEnviarComentario.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                Toast.makeText(getContext(), "Debes iniciar sesión para comentar", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String texto = editComentario.getText().toString().trim();
+            int puntuacion = (int) ratingBar.getRating();
+
+            if (texto.isEmpty() || puntuacion == 0) {
+                Toast.makeText(getContext(), "Escribe un comentario y selecciona una puntuación", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String peliId = pelicula.getId();
+
+            db.collection("DatosUsuario").document(user.getUid()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        String nombreUsuario = documentSnapshot.getString("Nombre");
+                        Comentario comentario = new Comentario(
+                                user.getUid(),
+                                nombreUsuario != null ? nombreUsuario : "Anónimo",
+                                texto,
+                                puntuacion,
+                                System.currentTimeMillis()
+                        );
+
+                        db.collection("Peliculas").document(peliId)
+                                .collection("Comentarios")
+                                .add(comentario)
+                                .addOnSuccessListener(doc -> {
+                                    Toast.makeText(getContext(), "Comentario enviado", Toast.LENGTH_SHORT).show();
+                                    editComentario.setText("");
+                                    ratingBar.setRating(0);
+                                    cargarComentarios();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Error al enviar comentario", Toast.LENGTH_SHORT).show();
+                                });
+                    });
+        });
+
+        cargarComentarios();
+
         return view;
     }
+
+    private void cargarComentarios() {
+        layoutComentarios.removeAllViews();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String peliId = pelicula.getId();
+
+        db.collection("Peliculas").document(peliId)
+                .collection("Comentarios")
+                .orderBy("timestamp")
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (DocumentSnapshot doc : query) {
+                        String nombre = doc.getString("nombreUsuario");
+                        String texto = doc.getString("comentario");
+                        int puntuacion = doc.getLong("puntuacion").intValue();
+
+                        TextView tv = new TextView(getContext());
+                        tv.setText(nombre + ": " + texto);
+                        tv.setTextColor(Color.WHITE);
+                        tv.setPadding(0, 8, 0, 8);
+                        layoutComentarios.addView(tv);
+
+                        RatingBar rating = new RatingBar(getContext(), null, android.R.attr.ratingBarStyleSmall);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        rating.setLayoutParams(params);
+                        rating.setNumStars(5);
+                        rating.setStepSize(1.0f);
+                        rating.setRating(puntuacion);
+                        rating.setIsIndicator(true);
+                        rating.setScaleX(0.8f);
+                        rating.setScaleY(0.8f);
+                        rating.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF6600")));
+                        layoutComentarios.addView(rating);
+                    }
+                });
+    }
+
 }

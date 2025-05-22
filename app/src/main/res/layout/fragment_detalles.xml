@@ -1,3 +1,4 @@
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -93,6 +94,52 @@
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/textComentariosTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comentarios"
+                android:textColor="#FF6600"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp" />
+
+            <EditText
+                android:id="@+id/editComentario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Escribe un comentario..."
+                android:background="@drawable/edittext_background"
+                android:padding="8dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:progressTint="@color/orange" />
+
+            <Button
+                android:id="@+id/btnEnviarComentario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar"
+                android:layout_gravity="end"
+                android:backgroundTint="#FF6600"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutComentarios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
