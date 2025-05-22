@@ -1,3 +1,4 @@
+
 package com.example.tfg_junio_java;
 
 import android.app.AlertDialog;
@@ -54,10 +55,20 @@ public class InicioSi extends AppCompatActivity {
             Button btnEditarPerfil = popupView.findViewById(R.id.btnEditarPerfil);
             Button btnCerrarSesion = popupView.findViewById(R.id.btnCerrarSesion);
 
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null && user.isAnonymous()) {
+                btnCerrarSesion.setEnabled(false);
+                btnCerrarSesion.setAlpha(0.5f);
+            }
+
             btnEditarPerfil.setOnClickListener(view -> {
                 popupWindow.dismiss();
-                Intent intent = new Intent(InicioSi.this, EditarPerfilActivity.class);
-                startActivityForResult(intent, EDITAR_PERFIL_REQUEST);
+                if (user != null && !user.isAnonymous()) {
+                    Intent intent = new Intent(InicioSi.this, EditarPerfilActivity.class);
+                    startActivityForResult(intent, EDITAR_PERFIL_REQUEST);
+                } else {
+                    Toast.makeText(InicioSi.this, "Debes registrarte para editar tu perfil o cerrar sesión.", Toast.LENGTH_SHORT).show();
+                }
             });
 
             btnCerrarSesion.setOnClickListener(view -> {
@@ -193,9 +204,4 @@ public class InicioSi extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-
-
-
-
 }

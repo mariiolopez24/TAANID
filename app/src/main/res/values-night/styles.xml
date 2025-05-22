@@ -2,15 +2,5 @@
 <resources>
 
     <!-- Estilo personalizado para el diálogo -->
-    <style name="CustomAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">?attr/colorSurface</item>
-        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/CustomDialogButton</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/CustomDialogButton</item>
-    </style>
-
-    <style name="CustomDialogButton" parent="Widget.Material3.Button.TextButton.Dialog">
-        <item name="android:textColor">?attr/colorPrimary</item>
-    </style>
 
 </resources>

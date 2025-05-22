@@ -95,7 +95,6 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/textComentariosTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Comentarios"
@@ -142,7 +141,6 @@
                 android:layout_marginTop="16dp" />
 
             <ImageButton
-                android:id="@+id/btnEliminarComentario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

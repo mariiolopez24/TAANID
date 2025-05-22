@@ -7,7 +7,7 @@ public class Comentario {
     private int puntuacion;
     private long timestamp;
 
-    public Comentario() {} // Necesario para Firestore
+    public Comentario() {}
 
     public Comentario(String usuarioId, String nombreUsuario, String comentario, int puntuacion, long timestamp) {
         this.usuarioId = usuarioId;
