@@ -188,7 +188,6 @@ public class InicioSi extends AppCompatActivity {
 
                 dialog.show();
             } else {
-                // Usuario anónimo: ir directamente al login
                 irAlLogin();
             }
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {

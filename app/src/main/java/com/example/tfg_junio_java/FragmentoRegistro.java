@@ -1,3 +1,4 @@
+
 package com.example.tfg_junio_java;
 
 import android.Manifest;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -209,3 +211,4 @@ public class FragmentoRegistro extends Fragment {
         }
     }
 }
+
