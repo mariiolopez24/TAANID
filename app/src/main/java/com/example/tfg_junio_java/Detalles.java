@@ -7,11 +7,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -23,6 +25,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -233,28 +236,91 @@ public class Detalles extends Fragment {
                         String nombre = doc.getString("nombreUsuario");
                         String texto = doc.getString("comentario");
                         int puntuacion = doc.getLong("puntuacion").intValue();
+                        String comentarioId = doc.getId(); // ID del comentario en Firestore
+
+                        LinearLayout comentarioLayout = new LinearLayout(getContext());
+                        comentarioLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        comentarioLayout.setGravity(Gravity.CENTER_VERTICAL);
+                        comentarioLayout.setPadding(0, 8, 0, 8);
+
 
                         TextView tv = new TextView(getContext());
                         tv.setText(nombre + ": " + texto);
                         tv.setTextColor(Color.WHITE);
-                        tv.setPadding(0, 8, 0, 8);
-                        layoutComentarios.addView(tv);
 
                         RatingBar rating = new RatingBar(getContext(), null, android.R.attr.ratingBarStyleSmall);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams ratingParams = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
-                        rating.setLayoutParams(params);
+                        rating.setLayoutParams(ratingParams);
                         rating.setNumStars(5);
                         rating.setStepSize(1.0f);
                         rating.setRating(puntuacion);
                         rating.setIsIndicator(true);
-                        rating.setScaleX(0.8f);
-                        rating.setScaleY(0.8f);
+                        rating.setScaleX(0.85f); // ajusta el tamaño visual
+                        rating.setScaleY(0.85f);
                         rating.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF6600")));
-                        layoutComentarios.addView(rating);
+
+                        comentarioLayout.addView(tv);
+                        comentarioLayout.addView(rating);
+
+                        if (esAdmin) {
+                            ImageButton btnEliminar = new ImageButton(getContext());
+                            btnEliminar.setImageResource(R.drawable.ic_delete);
+                            btnEliminar.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+                            btnEliminar.setColorFilter(Color.WHITE); // Ícono blanco
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(0, 8, 0, 8);
+                            btnEliminar.setLayoutParams(params);
+                            btnEliminar.setContentDescription("Eliminar comentario");
+
+                            btnEliminar.setOnClickListener(v -> {
+                                LayoutInflater inflater = LayoutInflater.from(getContext());
+                                View dialogView = inflater.inflate(R.layout.dialog_eliminar_comentario, null);
+
+                                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                        .setView(dialogView)
+                                        .create();
+
+                                TextView title = dialogView.findViewById(R.id.dialogTitle);
+                                TextView message = dialogView.findViewById(R.id.dialogMessage);
+                                Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
+                                Button btnAceptar = dialogView.findViewById(R.id.btnAceptar);
+
+                                title.setText("Eliminar comentario");
+                                message.setText("¿Estás seguro de que deseas eliminar este comentario?");
+
+                                btnCancelar.setOnClickListener(v1 -> dialog.dismiss());
+                                btnAceptar.setOnClickListener(v1 -> {
+                                    FirebaseFirestore.getInstance()
+                                            .collection("Peliculas").document(pelicula.getId())
+                                            .collection("Comentarios").document(comentarioId)
+                                            .delete()
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(getContext(), "Comentario eliminado", Toast.LENGTH_SHORT).show();
+                                                cargarComentarios(); // Recargar comentarios
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getContext(), "Error al eliminar comentario", Toast.LENGTH_SHORT).show();
+                                            });
+                                    dialog.dismiss();
+                                });
+
+                                dialog.show();
+                            });
+
+                            comentarioLayout.addView(btnEliminar);
+                        }
+
+                        layoutComentarios.addView(comentarioLayout);
                     }
                 });
     }
 
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
 }
