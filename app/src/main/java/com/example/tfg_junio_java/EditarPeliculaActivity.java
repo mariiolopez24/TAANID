@@ -1,16 +1,13 @@
-
 package com.example.tfg_junio_java;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,13 +20,14 @@ import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class EditarPeliculaActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText editNombre, editSinopsis, editTrailer, editUrlPelicula;
+    private EditText editNombre, editSinopsis, editSinopsisEn, editTrailer, editUrlPelicula;
     private ImageView imagePreview;
     private Uri imagenUri;
     private Pelicula pelicula;
@@ -46,6 +44,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
 
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
+        editSinopsisEn = findViewById(R.id.editSinopsisEn); 
         editTrailer = findViewById(R.id.editTrailer);
         editUrlPelicula = findViewById(R.id.editUrlPelicula);
         imagePreview = findViewById(R.id.imagePreview);
@@ -56,7 +55,8 @@ public class EditarPeliculaActivity extends AppCompatActivity {
 
         if (pelicula != null) {
             editNombre.setText(pelicula.getNombrePeli());
-            editSinopsis.setText(pelicula.getSinopsis());
+            editSinopsis.setText(pelicula.getSinopsis().get("es"));
+            editSinopsisEn.setText(pelicula.getSinopsis().get("en"));
             editTrailer.setText(pelicula.getUrlTrailer());
             editUrlPelicula.setText(pelicula.getUrlPelicula());
 
@@ -68,6 +68,16 @@ public class EditarPeliculaActivity extends AppCompatActivity {
 
         btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
         btnGuardarCambios.setOnClickListener(v -> guardarCambios());
+
+        // Mostrar solo la sinopsis correspondiente al idioma
+        String idioma = Locale.getDefault().getLanguage();
+        if (idioma.equals("es")) {
+            editSinopsis.setVisibility(View.VISIBLE);
+            editSinopsisEn.setVisibility(View.GONE);
+        } else {
+            editSinopsis.setVisibility(View.GONE);
+            editSinopsisEn.setVisibility(View.VISIBLE);
+        }
     }
 
     private void abrirGaleria() {
@@ -86,18 +96,23 @@ public class EditarPeliculaActivity extends AppCompatActivity {
 
     private void guardarCambios() {
         String nombrePeli = editNombre.getText().toString().trim();
-        String sinopsis = editSinopsis.getText().toString().trim();
+        String sinopsisEs = editSinopsis.getText().toString().trim();
+        String sinopsisEn = editSinopsisEn.getText().toString().trim();
         String urlTrailer = editTrailer.getText().toString().trim();
         String urlPelicula = editUrlPelicula.getText().toString().trim();
 
-        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty()) {
+        if (nombrePeli.isEmpty() || sinopsisEs.isEmpty() || sinopsisEn.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty()) {
             Toast.makeText(this, getString(R.string.completarCampos), Toast.LENGTH_SHORT).show();
             return;
         }
 
+        Map<String, String> sinopsisMap = new HashMap<>();
+        sinopsisMap.put("es", sinopsisEs);
+        sinopsisMap.put("en", sinopsisEn);
+
         Map<String, Object> peliculaActualizada = new HashMap<>();
         peliculaActualizada.put("nombrePeli", nombrePeli);
-        peliculaActualizada.put("sinopsis", sinopsis);
+        peliculaActualizada.put("sinopsis", sinopsisMap);
         peliculaActualizada.put("urlTrailer", urlTrailer);
         peliculaActualizada.put("urlPelicula", urlPelicula);
 

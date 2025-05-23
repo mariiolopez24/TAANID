@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -71,6 +71,23 @@
             app:layout_constraintTop_toBottomOf="@id/editNombre" />
 
         <EditText
+            android:id="@+id/editSinopsisEn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#FF6600"
+            android:hint="@string/sinopsisEn"
+            android:inputType="textMultiLine"
+            android:padding="16dp"
+            android:textColor="#FF6600"
+            android:textColorHint="#FF6600"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editSinopsis" />
+
+        <EditText
             android:id="@+id/editTrailer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -85,7 +102,7 @@
             android:textColorHint="#FF6600"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editSinopsis" />
+            app:layout_constraintTop_toBottomOf="@id/editSinopsisEn" />
 
         <EditText
             android:id="@+id/editUrlPelicula"
@@ -116,7 +133,7 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTrailer" />
+            app:layout_constraintTop_toBottomOf="@id/editUrlPelicula" />
 
         <Button
             android:id="@+id/btnEliminarPelicula"

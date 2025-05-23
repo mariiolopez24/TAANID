@@ -54,7 +54,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
     public void onBindViewHolder(@NonNull PeliculasViewHolder holder, int position) {
         Pelicula peli = listaPelis.get(position);
         holder.titulo.setText(peli.getNombrePeli());
-        holder.detalle.setText(peli.getSinopsis());
+        String idioma = java.util.Locale.getDefault().getLanguage(); // "es", "en", etc.
+        String sinopsis = peli.getSinopsis().get(idioma);
+        if (sinopsis == null) {
+            sinopsis = peli.getSinopsis().get("es"); // idioma por defecto
+        }
+        holder.detalle.setText(sinopsis);
+
 
         Glide.with(context)
                 .load(peli.getImagenUrl())
@@ -131,7 +137,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
             } else {
                 for (Pelicula peli : listaPelisFull) {
                     String titulo = peli.getNombrePeli() != null ? peli.getNombrePeli().toLowerCase() : "";
-                    String sinopsis = peli.getSinopsis() != null ? peli.getSinopsis().toLowerCase() : "";
+                    String idioma = java.util.Locale.getDefault().getLanguage();
+                    String sinopsis = "";
+                    if (peli.getSinopsis() != null) {
+                        sinopsis = peli.getSinopsis().getOrDefault(idioma, peli.getSinopsis().get("es"));
+                        if (sinopsis == null) sinopsis = "";
+                        sinopsis = sinopsis.toLowerCase();
+                    }
+
 
                     if (titulo.contains(filterPattern) || sinopsis.contains(filterPattern)) {
                         listaFiltrada.add(peli);

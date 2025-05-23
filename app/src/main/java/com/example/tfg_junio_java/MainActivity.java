@@ -14,6 +14,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private TextView username;
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
+
                                 Intent intent = new Intent(MainActivity.this, InicioSi.class);
                                 startActivity(intent);
                                 finish();
@@ -70,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 ft.replace(android.R.id.content, fragmentoRegistro);
                 ft.addToBackStack(null);
                 ft.commit();
-
-
             }
         });
 
@@ -90,6 +94,5 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
-
     }
 }

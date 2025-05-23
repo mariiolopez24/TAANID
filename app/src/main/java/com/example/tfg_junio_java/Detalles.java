@@ -90,7 +90,13 @@ public class Detalles extends Fragment {
 
         if (pelicula != null) {
             textTitulo.setText(pelicula.getNombrePeli());
-            textSinopsis.setText(pelicula.getSinopsis());
+            String idioma = java.util.Locale.getDefault().getLanguage();
+            String sinopsis = pelicula.getSinopsis().get(idioma);
+            if (sinopsis == null) {
+                sinopsis = pelicula.getSinopsis().get("es");
+            }
+            textSinopsis.setText(sinopsis);
+
 
             Glide.with(this)
                     .load(pelicula.getImagenUrl())

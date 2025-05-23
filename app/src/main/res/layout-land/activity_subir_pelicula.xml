@@ -44,6 +44,19 @@
                 android:layout_marginBottom="16dp" />
 
             <EditText
+                android:id="@+id/editSinopsisEn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="string/sinopsisEn"
+                android:backgroundTint="#FF6600"
+                android:textColor="#FF6600"
+                android:textColorHint="#FF6600"
+                android:gravity="top"
+                android:minLines="3"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
                 android:id="@+id/editTrailer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

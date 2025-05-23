@@ -80,13 +80,13 @@ public class InicioSi extends AppCompatActivity {
                 startActivity(intent);
             });
 
-            // Posicionar el popup justo encima del avatar
+
             int[] location = new int[2];
             v.getLocationOnScreen(location);
             popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             int popupHeight = popupView.getMeasuredHeight();
-            int xOffset = -popupView.getMeasuredWidth() + v.getWidth(); // alineado a la derecha
-            int yOffset = -popupHeight; // justo encima
+            int xOffset = -popupView.getMeasuredWidth() + v.getWidth();
+            int yOffset = -popupHeight;
 
             popupWindow.showAsDropDown(v, xOffset, yOffset);
         });

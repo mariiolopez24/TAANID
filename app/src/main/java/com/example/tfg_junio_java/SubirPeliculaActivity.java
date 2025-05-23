@@ -25,7 +25,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText editNombre, editSinopsis, editTrailer, editUrlPelicula;
+    private EditText editNombre, editSinopsis, editSinopsisEn, editTrailer, editUrlPelicula;
     private ImageView imagePreview;
     private Uri imagenUri;
 
@@ -37,6 +37,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
+        editSinopsisEn = findViewById(R.id.editSinopsisEn); // nuevo
         editTrailer = findViewById(R.id.editTrailer);
         editUrlPelicula = findViewById(R.id.editUrlPelicula);
         imagePreview = findViewById(R.id.imagePreview);
@@ -63,11 +64,13 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
     private void verificarCamposYSubir() {
         String nombrePeli = editNombre.getText().toString().trim();
-        String sinopsis = editSinopsis.getText().toString().trim();
+        String sinopsisEs = editSinopsis.getText().toString().trim();
+        String sinopsisEn = editSinopsisEn.getText().toString().trim();
         String urlTrailer = editTrailer.getText().toString().trim();
         String urlPelicula = editUrlPelicula.getText().toString().trim();
 
-        if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty() || imagenUri == null) {
+        if (nombrePeli.isEmpty() || sinopsisEs.isEmpty() || sinopsisEn.isEmpty() ||
+                urlTrailer.isEmpty() || urlPelicula.isEmpty() || imagenUri == null) {
             Toast.makeText(this, getString(R.string.completarImagen), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -77,7 +80,6 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     boolean existeDuplicado = queryDocumentSnapshots.getDocuments().stream().anyMatch(doc ->
                             nombrePeli.equalsIgnoreCase(doc.getString("nombrePeli")) ||
-                                    sinopsis.equalsIgnoreCase(doc.getString("sinopsis")) ||
                                     urlTrailer.equalsIgnoreCase(doc.getString("urlTrailer")) ||
                                     urlPelicula.equalsIgnoreCase(doc.getString("urlPelicula"))
                     );
@@ -85,7 +87,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                     if (existeDuplicado) {
                         Toast.makeText(this, getString(R.string.existePeli), Toast.LENGTH_SHORT).show();
                     } else {
-                        subirImagenYGuardarPelicula(nombrePeli, sinopsis, urlTrailer, urlPelicula);
+                        subirImagenYGuardarPelicula(nombrePeli, sinopsisEs, sinopsisEn, urlTrailer, urlPelicula);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -93,17 +95,20 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                 });
     }
 
-
-    private void subirImagenYGuardarPelicula(String nombrePeli, String sinopsis, String urlTrailer, String urlPelicula) {
+    private void subirImagenYGuardarPelicula(String nombrePeli, String sinopsisEs, String sinopsisEn, String urlTrailer, String urlPelicula) {
         MediaManager.get().upload(imagenUri)
                 .callback(new UploadCallback() {
                     @Override
                     public void onSuccess(String requestId, Map resultData) {
                         String imagenUrl = resultData.get("secure_url").toString();
 
+                        Map<String, String> sinopsisMap = new HashMap<>();
+                        sinopsisMap.put("es", sinopsisEs);
+                        sinopsisMap.put("en", sinopsisEn);
+
                         Map<String, Object> pelicula = new HashMap<>();
                         pelicula.put("nombrePeli", nombrePeli);
-                        pelicula.put("sinopsis", sinopsis);
+                        pelicula.put("sinopsis", sinopsisMap);
                         pelicula.put("urlTrailer", urlTrailer);
                         pelicula.put("urlPelicula", urlPelicula);
                         pelicula.put("imagenUrl", imagenUrl);

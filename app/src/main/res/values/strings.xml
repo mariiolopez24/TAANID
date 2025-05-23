@@ -81,4 +81,8 @@
     <string name="errorComent">Error al enviar comentario</string>
     <string name="comentEliminado">Comentario eliminado</string>
     <string name="errorComentEliminado">Error al eliminar comentario</string>
+    <string name="sinopsisEn">Sinopsis (English)</string>
+    <string name="mostrarFavoritos">Mostrar Favoritos</string>
+    <string name="mostrarTodo">Mostrar Todas</string>
+    <string name="subirPeli">Subir Película</string>
 </resources>

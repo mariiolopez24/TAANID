@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Lista extends Fragment {
 
@@ -67,16 +68,24 @@ public class Lista extends Fragment {
             }
         });
 
-        btnFiltrarFavoritos.setOnClickListener(v -> {
-            mostrandoFavoritos = !mostrandoFavoritos;
-            if (mostrandoFavoritos) {
-                cargarFavoritosDesdeFirestore();
-                btnFiltrarFavoritos.setText("Mostrar Todas");
-            } else {
-                verificarSiEsAdminYMostrarPeliculas();
-                btnFiltrarFavoritos.setText("Mostrar Favoritos");
-            }
-        });
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || user.isAnonymous()) {
+            btnFiltrarFavoritos.setEnabled(false);
+            btnFiltrarFavoritos.setAlpha(0.5f);
+        } else {
+            btnFiltrarFavoritos.setEnabled(true);
+            btnFiltrarFavoritos.setAlpha(1f);
+            btnFiltrarFavoritos.setOnClickListener(v -> {
+                mostrandoFavoritos = !mostrandoFavoritos;
+                if (mostrandoFavoritos) {
+                    cargarFavoritosDesdeFirestore();
+                    btnFiltrarFavoritos.setText(getString(R.string.mostrarTodo));
+                } else {
+                    verificarSiEsAdminYMostrarPeliculas();
+                    btnFiltrarFavoritos.setText(getString(R.string.mostrarFavoritos));
+                }
+            });
+        }
 
         verificarSiEsAdminYMostrarPeliculas();
 
@@ -86,7 +95,7 @@ public class Lista extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        configurarLayoutManager(); // también aquí para cuando se rota
+        configurarLayoutManager();
     }
 
     private void configurarLayoutManager() {
@@ -154,10 +163,16 @@ public class Lista extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         peliculas.clear();
                         for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                            Pelicula pelicula = doc.toObject(Pelicula.class);
-                            if (pelicula != null) {
-                                pelicula.setId(doc.getId());
-                                peliculas.add(pelicula);
+                            Object sinopsisObj = doc.get("sinopsis");
+                            if (sinopsisObj instanceof Map) {
+                                Pelicula pelicula = doc.toObject(Pelicula.class);
+                                if (pelicula != null) {
+                                    pelicula.setId(doc.getId());
+                                    peliculas.add(pelicula);
+                                }
+                            } else {
+                                // Puedes registrar el error o mostrar un mensaje si lo deseas
+                                // Log.w("Firestore", "Formato incorrecto en sinopsis para doc: " + doc.getId());
                             }
                         }
 

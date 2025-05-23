@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="#ff6600"
-        android:text="Subir Película"
+        android:text="@string/subirPeli"
         android:textColor="@android:color/white"
         android:visibility="gone" />
 
