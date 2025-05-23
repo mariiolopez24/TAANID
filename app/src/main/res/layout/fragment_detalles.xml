@@ -151,7 +151,6 @@
                 android:visibility="gone"
                 app:tint="@color/white"
                 tools:visibility="gone" />
-
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

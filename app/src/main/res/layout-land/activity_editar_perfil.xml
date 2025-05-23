@@ -11,11 +11,10 @@
         android:id="@+id/imageAvatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
         android:background="@drawable/avatar_profile_vector"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,14 +22,12 @@
         android:id="@+id/btnCambiarAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         android:backgroundTint="#FF6600"
         android:text="@string/CambiarAvatar"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageAvatar" />
+        app:layout_constraintStart_toEndOf="@id/imageAvatar"
+        app:layout_constraintTop_toTopOf="@id/imageAvatar" />
 
     <EditText
         android:id="@+id/editNombre"
@@ -47,7 +44,7 @@
         android:textColorHint="#FF6600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnCambiarAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/imageAvatar" />
 
     <EditText
         android:id="@+id/editFechaNacimiento"

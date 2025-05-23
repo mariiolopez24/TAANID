@@ -19,23 +19,19 @@
             android:layout_marginTop="40dp"
             android:contentDescription="@string/imagen_pelicula"
             android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnSeleccionarImagen"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnSeleccionarImagen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="#FF6600"
             android:text="@string/btnSelecionarImagen"
             android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imagePreview" />
+            app:layout_constraintStart_toEndOf="@id/imagePreview"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editNombre"
@@ -51,9 +47,8 @@
             android:textColor="#FF6600"
             android:textColorHint="#FF6600"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSeleccionarImagen" />
+            app:layout_constraintTop_toBottomOf="@id/imagePreview" />
 
         <EditText
             android:id="@+id/editSinopsis"
@@ -69,7 +64,6 @@
             android:textColor="#FF6600"
             android:textColorHint="#FF6600"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editNombre" />
 
@@ -87,7 +81,6 @@
             android:textColor="#FF6600"
             android:textColorHint="#FF6600"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editSinopsis" />
 
@@ -105,7 +98,6 @@
             android:textColor="#FF6600"
             android:textColorHint="#FF6600"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editTrailer" />
 
@@ -120,7 +112,6 @@
             android:text="@string/btnGuardar"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editTrailer" />
 
@@ -135,7 +126,6 @@
             android:text="@string/btnEliminar"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnGuardarCambios" />
     </androidx.constraintlayout.widget.ConstraintLayout>
