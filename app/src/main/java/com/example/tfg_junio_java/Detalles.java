@@ -17,11 +17,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -133,7 +130,7 @@ public class Detalles extends Fragment {
                         String embedUrl = "https://www.youtube.com/embed/" + videoId;
                         webView.loadUrl(embedUrl);
                     } else {
-                        Toast.makeText(getContext(), "URL de YouTube no válida", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "URL no válida", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(), "No hay película disponible", Toast.LENGTH_SHORT).show();
@@ -173,18 +170,27 @@ public class Detalles extends Fragment {
                     });
         });
 
-        btnEnviarComentario.setOnClickListener(v -> {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user == null) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || user.isAnonymous()) {
+            editComentario.setOnTouchListener((v, event) -> {
                 Toast.makeText(getContext(), "Debes iniciar sesión para comentar", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                return true; // evita que se abra el teclado
+            });
 
+            ratingBar.setOnTouchListener((v, event) -> {
+                Toast.makeText(getContext(), "Debes iniciar sesión para puntuar", Toast.LENGTH_SHORT).show();
+                return true; // evita que se modifique la puntuación
+            });
+
+            btnEnviarComentario.setEnabled(false);
+        }
+
+        btnEnviarComentario.setOnClickListener(v -> {
             String texto = editComentario.getText().toString().trim();
             int puntuacion = (int) ratingBar.getRating();
 
-            if (texto.isEmpty() || puntuacion == 0) {
-                Toast.makeText(getContext(), "Escribe un comentario y selecciona una puntuación", Toast.LENGTH_SHORT).show();
+            if (texto.isEmpty() && puntuacion == 0) {
+                Toast.makeText(getContext(), "Escribe un comentario o selecciona una puntuación", Toast.LENGTH_SHORT).show();
                 return;
             }
 

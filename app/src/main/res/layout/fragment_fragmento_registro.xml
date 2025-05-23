@@ -8,8 +8,6 @@
     tools:context=".FragmentoRegistro">
 
     <!-- Email -->
-
-
     <EditText
         android:id="@+id/txtUsuario"
         android:layout_width="0dp"
@@ -111,6 +109,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtContraseña" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="*"
+        android:textColor="#FF6600"
+        app:layout_constraintBottom_toBottomOf="@id/txtNombre"
+        app:layout_constraintStart_toEndOf="@id/txtNombre"
+        app:layout_constraintTop_toTopOf="@id/txtNombre"
+        app:layout_constraintVertical_bias="0.0" />
+
     <EditText
         android:id="@+id/txtContraseña"
         android:layout_width="0dp"
@@ -139,7 +148,6 @@
         app:layout_constraintStart_toEndOf="@id/txtUsuario"
         app:layout_constraintTop_toTopOf="@id/txtUsuario"
         app:layout_constraintVertical_bias="0.6" />
-
 
     <TextView
         android:layout_width="wrap_content"
