@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:buttonTint="#FF6600"
-        android:text="¿Es administrador?"
+        android:text="@string/esAdmin"
         android:textColor="#FF6600"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

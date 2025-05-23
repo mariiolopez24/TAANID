@@ -63,7 +63,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#FF6600"
-                android:text="Ver Tráiler"
+                android:text="@string/btnTrailer"
                 android:textColor="@android:color/white" />
 
             <Button
@@ -73,7 +73,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="#FF6600"
-                android:text="Ver Película"
+                android:text="@string/btnPelicula"
                 android:textColor="@android:color/white" />
 
             <WebView
@@ -90,14 +90,14 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#FF6600"
-                android:text="Editar Película"
+                android:text="@string/btnEditarPeli"
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Comentarios"
+                android:text="@string/comentarios"
                 android:textColor="#FF6600"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -107,7 +107,7 @@
                 android:id="@+id/editComentario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Escribe un comentario..."
+                android:hint="@string/escribirComent"
                 android:background="@drawable/edittext_background"
                 android:padding="8dp"
                 android:textColor="#FFFFFF"
@@ -127,7 +127,7 @@
                 android:id="@+id/btnEnviarComentario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enviar"
+                android:text="@string/btnEnviar"
                 android:layout_gravity="end"
                 android:backgroundTint="#FF6600"
                 android:textColor="@android:color/white"

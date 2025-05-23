@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".Lista">
 
-    <!-- SearchBar visible en la parte superior -->
     <EditText
         android:id="@+id/search_input"
         android:layout_width="match_parent"
@@ -16,14 +15,13 @@
         android:background="#000000"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:foregroundTint="#FF6600"
-        android:hint="Buscar por título o sinopsis"
+        android:hint="@string/busquedaPeli"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:padding="12dp"
         android:textColor="@color/orange"
         android:textColorHint="@color/orange" />
 
-    <!-- Botón para mostrar favoritos -->
     <Button
         android:id="@+id/btnFiltrarFavoritos"
         android:layout_width="wrap_content"
@@ -31,10 +29,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:backgroundTint="#FF6600"
-        android:text="Mostrar Favoritos"
+        android:text="@string/btnFavorito"
         android:textColor="@android:color/white" />
 
-    <!-- SearchView que se muestra al hacer clic en el SearchBar -->
     <com.google.android.material.search.SearchView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,7 +39,6 @@
         android:visibility="gone"
         app:layout_behavior="@string/avatar_usuario" />
 
-    <!-- RecyclerView para mostrar la lista de películas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPelis"
         android:layout_width="match_parent"

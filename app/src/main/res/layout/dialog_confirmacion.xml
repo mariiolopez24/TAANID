@@ -10,7 +10,7 @@
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Volver al inicio"
+        android:text="@string/volverInicio"
         android:textColor="#FF6600"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -20,7 +20,7 @@
         android:id="@+id/dialogMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Seguro que quieres cerrar sesión y volver a la pantalla de inicio?"
+        android:text="@string/advertenciaInicio"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:layout_marginBottom="24dp" />
@@ -35,7 +35,7 @@
             android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar"
+            android:text="@string/btnCancelar"
             android:textColor="#FF6600"
             android:backgroundTint="#222222"
             android:layout_marginEnd="8dp" />
@@ -44,7 +44,7 @@
             android:id="@+id/btnAceptar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sí"
+            android:text="@string/btnSi"
             android:textColor="#000000"
             android:backgroundTint="#FF6600" />
     </LinearLayout>

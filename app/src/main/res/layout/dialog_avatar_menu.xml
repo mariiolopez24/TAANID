@@ -10,7 +10,7 @@
         android:id="@+id/btnEditarPerfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Editar perfil"
+        android:text="@string/btnEditarperfil"
         android:textColor="#FFFFFF"
         android:backgroundTint="#FF6600"
         android:layout_marginBottom="12dp" />
@@ -19,7 +19,7 @@
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cerrar sesión"
+        android:text="@string/btnCerrarSesion"
         android:textColor="#FFFFFF"
         android:backgroundTint="#FF6600" />
 </LinearLayout>
