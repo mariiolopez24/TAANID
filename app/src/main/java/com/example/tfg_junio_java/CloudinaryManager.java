@@ -8,7 +8,7 @@ import java.util.Map;
 public class CloudinaryManager {
     public static void init(Context context) {
         try {
-            MediaManager.get(); // Si ya está inicializado, no hace nada
+            MediaManager.get();
         } catch (IllegalStateException e) {
             Map<String, String> config = new HashMap<>();
             config.put("cloud_name", "da8f7v46t");

@@ -1,52 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#111"
+    android:orientation="vertical"
     android:padding="12dp">
 
     <ImageView
         android:id="@+id/imageTrailer"
-        android:layout_width="160dp"
-        android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
         android:scaleType="centerCrop"
-        android:layout_alignParentStart="true"
         android:contentDescription="@string/imagen_pelicula" />
 
     <ImageView
         android:id="@+id/estrellaFavorito"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="24dp"
         android:contentDescription="Favorito"
         android:src="@drawable/ic_star_border" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imageTrailer"
-        android:layout_toStartOf="@id/estrellaFavorito"
-        android:orientation="vertical"
-        android:layout_marginStart="12dp">
+        android:textColor="#FF6600"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
 
-        <TextView
-            android:id="@+id/textTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FF6600"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingBottom="4dp" />
-
-        <TextView
-            android:id="@+id/textDetalles"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#CCCCCC"
-            android:textSize="14sp"
-            android:lineSpacingExtra="4dp" />
-    </LinearLayout>
-</RelativeLayout>
+    <TextView
+        android:id="@+id/textDetalles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#CCCCCC"
+        android:textSize="14sp"
+        android:lineSpacingExtra="4dp" />
+</LinearLayout>

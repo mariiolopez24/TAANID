@@ -68,7 +68,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
         String urlPelicula = editUrlPelicula.getText().toString().trim();
 
         if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty() || imagenUri == null) {
-            Toast.makeText(this, "Por favor, completa todos los campos y selecciona una imagen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.completarImagen), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -83,13 +83,13 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                     );
 
                     if (existeDuplicado) {
-                        Toast.makeText(this, "Ya existe una película con alguno de esos datos.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.existePeli), Toast.LENGTH_SHORT).show();
                     } else {
                         subirImagenYGuardarPelicula(nombrePeli, sinopsis, urlTrailer, urlPelicula);
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al verificar duplicados.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.errorDuplicados), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -114,21 +114,21 @@ public class SubirPeliculaActivity extends AppCompatActivity {
                                     String idGenerado = documentReference.getId();
                                     documentReference.update("id", idGenerado)
                                             .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(SubirPeliculaActivity.this, "Película guardada", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SubirPeliculaActivity.this, getString(R.string.peliGuardada), Toast.LENGTH_SHORT).show();
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> {
-                                                Toast.makeText(SubirPeliculaActivity.this, "Guardada, pero no se pudo actualizar el ID", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SubirPeliculaActivity.this, getString(R.string.guardadoSinId), Toast.LENGTH_SHORT).show();
                                                 finish();
                                             });
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(SubirPeliculaActivity.this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SubirPeliculaActivity.this, getString(R.string.errorGuardad), Toast.LENGTH_SHORT).show();
                                 });
                     }
 
                     @Override public void onError(String requestId, ErrorInfo error) {
-                        Toast.makeText(SubirPeliculaActivity.this, "Error al subir imagen: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SubirPeliculaActivity.this, getString(R.string.errorImagen) + error.getDescription(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override public void onStart(String requestId) {}

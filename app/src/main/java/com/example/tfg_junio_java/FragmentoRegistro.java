@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -63,7 +62,7 @@ public class FragmentoRegistro extends Fragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
-                        Toast.makeText(getContext(), "Avatar seleccionado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.avatarSelect), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -119,7 +118,7 @@ public class FragmentoRegistro extends Fragment {
         boolean esAdmin = checkboxAdmin.isChecked();
 
         if (email.isEmpty() || password.isEmpty() || nombreUsuario.isEmpty()) {
-            Toast.makeText(getContext(), "Correo, nombre y contraseña son obligatorios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.obligatorios), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -128,7 +127,7 @@ public class FragmentoRegistro extends Fragment {
                     if (task.isSuccessful()) {
                         boolean emailEnUso = !task.getResult().getSignInMethods().isEmpty();
                         if (emailEnUso) {
-                            Toast.makeText(getContext(), "Este correo ya está registrado", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.registrado), Toast.LENGTH_SHORT).show();
                         } else {
                             mAuth.createUserWithEmailAndPassword(email, password)
                                     .addOnCompleteListener(registroTask -> {
@@ -148,7 +147,7 @@ public class FragmentoRegistro extends Fragment {
                                                     Date fecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(fechaNac);
                                                     datosUsuario.put("FechaNacimiento", new Timestamp(fecha));
                                                 } catch (ParseException e) {
-                                                    Toast.makeText(getContext(), "Formato de fecha inválido. Usa dd/MM/yyyy", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), getString(R.string.formatoFecha), Toast.LENGTH_SHORT).show();
                                                     return;
                                                 }
                                             }
@@ -164,7 +163,7 @@ public class FragmentoRegistro extends Fragment {
                                                             }
 
                                                             @Override public void onError(String requestId, ErrorInfo error) {
-                                                                Toast.makeText(getContext(), "Error al subir avatar: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(getContext(), getString(R.string.errorAvatar) + error.getDescription(), Toast.LENGTH_SHORT).show();
                                                             }
 
                                                             @Override public void onStart(String requestId) {}
@@ -176,12 +175,12 @@ public class FragmentoRegistro extends Fragment {
                                                 guardarEnFirestore(uid, datosUsuario);
                                             }
                                         } else {
-                                            Toast.makeText(getContext(), "Error al registrar: " + registroTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), getString(R.string.errorRegistrar) + registroTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
                     } else {
-                        Toast.makeText(getContext(), "Error al verificar el correo: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.errorVerificarCorreo) + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -192,11 +191,11 @@ public class FragmentoRegistro extends Fragment {
                 .document(uid)
                 .set(datosUsuario)
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(getContext(), "Registro exitoso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.registroBien), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), MainActivity.class));
                     requireActivity().finish();
                 })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(getContext(), getString(R.string.errorDatos) + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -206,7 +205,7 @@ public class FragmentoRegistro extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 abrirSelectorImagen();
             } else {
-                Toast.makeText(getContext(), "Permiso denegado para acceder a imágenes", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.permisoDenegado), Toast.LENGTH_SHORT).show();
             }
         }
     }

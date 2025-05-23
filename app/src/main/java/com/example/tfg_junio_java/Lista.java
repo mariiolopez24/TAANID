@@ -1,5 +1,7 @@
+
 package com.example.tfg_junio_java;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +47,7 @@ public class Lista extends Fragment {
         searchInput = view.findViewById(R.id.search_input);
         btnFiltrarFavoritos = view.findViewById(R.id.btnFiltrarFavoritos);
 
-        recyclerLista.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        configurarLayoutManager();
 
         // Listener para filtrar mientras se escribe
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -80,6 +83,21 @@ public class Lista extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        configurarLayoutManager(); // también aquí para cuando se rota
+    }
+
+    private void configurarLayoutManager() {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerLista.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        } else {
+            recyclerLista.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+    }
+
     private void verificarSiEsAdminYMostrarPeliculas() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -92,7 +110,7 @@ public class Lista extends Fragment {
                         cargarPeliculasDesdeFirestore(esAdmin);
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Error al verificar permisos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.errorPermisos), Toast.LENGTH_SHORT).show();
                         cargarPeliculasDesdeFirestore(false);
                     });
         } else {
@@ -122,7 +140,7 @@ public class Lista extends Fragment {
 
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Error al cargar películas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.errorCargarPeli), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -151,7 +169,7 @@ public class Lista extends Fragment {
 
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Error al cargar favoritos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.errorCargarFavoritos), Toast.LENGTH_SHORT).show();
                     });
         }
     }

@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +111,7 @@ public class Detalles extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(pelicula.getUrlTrailer()));
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), "No hay tráiler disponible", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.noTrailer), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -130,13 +129,13 @@ public class Detalles extends Fragment {
                         String embedUrl = "https://www.youtube.com/embed/" + videoId;
                         webView.loadUrl(embedUrl);
                     } else {
-                        Toast.makeText(getContext(), "URL no válida", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.noUrl), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "No hay película disponible", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.noPeli), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "Debes iniciar sesión para ver la película completa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.iniciaPeli), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,7 +143,7 @@ public class Detalles extends Fragment {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user == null || user.isAnonymous()) {
-                Toast.makeText(getContext(), "Debes iniciar sesión para añadir a favoritos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.iniciarFavoritos), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -173,12 +172,12 @@ public class Detalles extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null || user.isAnonymous()) {
             editComentario.setOnTouchListener((v, event) -> {
-                Toast.makeText(getContext(), "Debes iniciar sesión para comentar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.iniciarComentar), Toast.LENGTH_SHORT).show();
                 return true; // evita que se abra el teclado
             });
 
             ratingBar.setOnTouchListener((v, event) -> {
-                Toast.makeText(getContext(), "Debes iniciar sesión para puntuar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.iniciarPuntuar), Toast.LENGTH_SHORT).show();
                 return true; // evita que se modifique la puntuación
             });
 
@@ -190,7 +189,7 @@ public class Detalles extends Fragment {
             int puntuacion = (int) ratingBar.getRating();
 
             if (texto.isEmpty() && puntuacion == 0) {
-                Toast.makeText(getContext(), "Escribe un comentario o selecciona una puntuación", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.escribirComentoPuntar), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -212,13 +211,13 @@ public class Detalles extends Fragment {
                                 .collection("Comentarios")
                                 .add(comentario)
                                 .addOnSuccessListener(doc -> {
-                                    Toast.makeText(getContext(), "Comentario enviado", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getString(R.string.comentEnviado), Toast.LENGTH_SHORT).show();
                                     editComentario.setText("");
                                     ratingBar.setRating(0);
                                     cargarComentarios();
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(getContext(), "Error al enviar comentario", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getString(R.string.errorComent), Toast.LENGTH_SHORT).show();
                                 });
                     });
         });
@@ -305,11 +304,11 @@ public class Detalles extends Fragment {
                                             .collection("Comentarios").document(comentarioId)
                                             .delete()
                                             .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(getContext(), "Comentario eliminado", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), getString(R.string.comentEliminado), Toast.LENGTH_SHORT).show();
                                                 cargarComentarios(); // Recargar comentarios
                                             })
                                             .addOnFailureListener(e -> {
-                                                Toast.makeText(getContext(), "Error al eliminar comentario", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), getString(R.string.errorComentEliminado), Toast.LENGTH_SHORT).show();
                                             });
                                     dialog.dismiss();
                                 });

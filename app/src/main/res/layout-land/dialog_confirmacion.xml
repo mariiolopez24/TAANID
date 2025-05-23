@@ -6,15 +6,16 @@
     android:padding="24dp"
     android:background="#000000">
 
+    <!-- Sección de texto -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1">
 
         <TextView
             android:id="@+id/dialogTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/volverInicio"
             android:textColor="#FF6600"
@@ -24,7 +25,7 @@
 
         <TextView
             android:id="@+id/dialogMessage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/advertenciaInicio"
             android:textColor="#FFFFFF"
@@ -32,28 +33,34 @@
             android:layout_marginBottom="24dp" />
     </LinearLayout>
 
+    <!-- Sección de botones -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="end"
-        android:layout_weight="1">
+        android:gravity="bottom|end">
 
-        <Button
-            android:id="@+id/btnCancelar"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btnCancelar"
-            android:textColor="#FF6600"
-            android:backgroundTint="#222222"
-            android:layout_marginEnd="8dp" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnAceptar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnSi"
-            android:textColor="#000000"
-            android:backgroundTint="#FF6600" />
+            <Button
+                android:id="@+id/btnCancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnCancelar"
+                android:textColor="#FF6600"
+                android:backgroundTint="#222222"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnAceptar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FF6600"
+                android:text="@string/btnSi"
+                android:textColor="#000000" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

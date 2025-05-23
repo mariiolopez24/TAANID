@@ -1,6 +1,8 @@
 
 package com.example.tfg_junio_java;
 
+import static android.provider.Settings.System.getString;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +83,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
             user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user == null || user.isAnonymous()) {
-                Toast.makeText(context, "Debes iniciar sesión para añadir a favoritos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.iniciarFavoritos), Toast.LENGTH_SHORT).show();
                 return;
             }
 

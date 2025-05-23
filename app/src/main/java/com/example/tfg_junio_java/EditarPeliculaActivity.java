@@ -91,7 +91,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
         String urlPelicula = editUrlPelicula.getText().toString().trim();
 
         if (nombrePeli.isEmpty() || sinopsis.isEmpty() || urlTrailer.isEmpty() || urlPelicula.isEmpty()) {
-            Toast.makeText(this, "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.completarCampos), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -112,7 +112,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
                         }
 
                         @Override public void onError(String requestId, ErrorInfo error) {
-                            Toast.makeText(EditarPeliculaActivity.this, "Error al subir imagen: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarPeliculaActivity.this, getString(R.string.errorImagen) + error.getDescription(), Toast.LENGTH_SHORT).show();
                         }
 
                         @Override public void onStart(String requestId) {}
@@ -130,11 +130,11 @@ public class EditarPeliculaActivity extends AppCompatActivity {
                 .document(pelicula.getId())
                 .update(peliculaActualizada)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(EditarPeliculaActivity.this, "Película actualizada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarPeliculaActivity.this, getString(R.string.peliActualizada), Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(EditarPeliculaActivity.this, "Error al actualizar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarPeliculaActivity.this, getString(R.string.errorActualizar), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -143,11 +143,11 @@ public class EditarPeliculaActivity extends AppCompatActivity {
                 .document(pelicula.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Película eliminada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.peliEliminada), Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al eliminar película", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.errorPeliEliminada), Toast.LENGTH_SHORT).show();
                 });
     }
 

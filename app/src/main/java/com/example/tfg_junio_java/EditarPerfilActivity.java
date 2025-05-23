@@ -150,7 +150,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         boolean avatarCambiado = nuevaImagenUri != null;
 
         if (!nombreCambiado && !fechaCambiada && !avatarCambiado) {
-            Toast.makeText(this, "No se realizaron cambios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.noCambios), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,7 +173,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                             }
 
                             @Override public void onError(String requestId, ErrorInfo error) {
-                                Toast.makeText(EditarPerfilActivity.this, "Error al subir imagen", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditarPerfilActivity.this, getString(R.string.errorAvatar), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override public void onStart(String requestId) {}
@@ -183,14 +183,14 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         .dispatch();
             } else {
                 if (datos.isEmpty()) {
-                    Toast.makeText(this, "No se realizaron cambios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.noCambios), Toast.LENGTH_SHORT).show();
                 } else {
                     guardarEnFirestore(user.getUid(), datos);
                 }
             }
 
         } catch (Exception e) {
-            Toast.makeText(this, "Fecha inválida", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.fechaInvalida), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,11 +199,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 .document(uid)
                 .update(datos)
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(this, "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.perfilActualizado), Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al guardar cambios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.errorCambios), Toast.LENGTH_SHORT).show();
                 });
     }
 

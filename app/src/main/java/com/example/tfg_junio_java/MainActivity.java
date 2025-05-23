@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 String pass = password.getText().toString().trim();
 
                 if (email.isEmpty() || pass.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.completarCampos), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -52,13 +52,11 @@ public class MainActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Log.d("LOGIN_SUCCESS", "Usuario autenticado: " + user.getUid());
                                 Intent intent = new Intent(MainActivity.this, InicioSi.class);
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Log.w("LOGIN_FAILED", "Error de inicio de sesión", task.getException());
-                                Toast.makeText(MainActivity.this, "Error de inicio de sesión: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, getString(R.string.errorSesion) + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -83,14 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signInAnonymously()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // Sesión anónima iniciada correctamente
                                 Intent intent = new Intent(MainActivity.this, InicioSi.class);
                                 startActivity(intent);
-                                finish(); // Opcional: cierra la pantalla de login
+                                finish();
                             } else {
-                                // Error al iniciar sesión anónima
-                                Log.e("INVITADO", "Error al iniciar como invitado", task.getException());
-                                Toast.makeText(MainActivity.this, "No se pudo iniciar como invitado", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, getString(R.string.sesionInvitado), Toast.LENGTH_SHORT).show();
                             }
                         });
             }

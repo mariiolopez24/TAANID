@@ -20,7 +20,10 @@
         <activity android:name=".EditarPerfilActivity" />
         <activity android:name=".EditarPeliculaActivity" />
         <activity android:name=".FragmentActivity" android:exported="true" />
-        <activity android:name=".InicioSi" android:exported="true" />
+        <activity
+            android:name=".InicioSi"
+            android:exported="true"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

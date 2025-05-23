@@ -3,6 +3,7 @@ package com.example.tfg_junio_java;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +68,7 @@ public class InicioSi extends AppCompatActivity {
                     Intent intent = new Intent(InicioSi.this, EditarPerfilActivity.class);
                     startActivityForResult(intent, EDITAR_PERFIL_REQUEST);
                 } else {
-                    Toast.makeText(InicioSi.this, "Debes registrarte para editar tu perfil o cerrar sesión.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InicioSi.this, getString(R.string.iniciarSesionEditar), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -157,7 +158,7 @@ public class InicioSi extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDITAR_PERFIL_REQUEST) {
             recargarAvatar();
-            Toast.makeText(this, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.perfilActualizado), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -203,4 +204,10 @@ public class InicioSi extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 }
