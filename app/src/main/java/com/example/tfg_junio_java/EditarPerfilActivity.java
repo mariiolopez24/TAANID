@@ -62,7 +62,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         Button btnCambiarAvatar = findViewById(R.id.btnCambiarAvatar);
         btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
 
-        btnGuardarCambios.setEnabled(false); // Desactivado por defecto
+        btnGuardarCambios.setEnabled(false);
 
         cargarDatosUsuario();
 
@@ -80,7 +80,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        ignorarCambios = true; // Desactiva el watcher temporalmente
+        ignorarCambios = true;
 
         FirebaseFirestore.getInstance().collection("DatosUsuario")
                 .document(user.getUid())
@@ -111,8 +111,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         }
 
                         datosCargados = true;
-                        ignorarCambios = false; // Reactiva el watcher
-                        verificarCambios(); // Verifica si hay cambios reales
+                        ignorarCambios = false;
+                        verificarCambios();
                     }
                 });
     }
@@ -137,7 +137,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     }
 
     private void guardarCambios() {
-        if (!datosCargados) return; // Evita guardar si los datos aún no se han cargado
+        if (!datosCargados) return;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;

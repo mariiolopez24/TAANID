@@ -54,10 +54,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
     public void onBindViewHolder(@NonNull PeliculasViewHolder holder, int position) {
         Pelicula peli = listaPelis.get(position);
         holder.titulo.setText(peli.getNombrePeli());
-        String idioma = java.util.Locale.getDefault().getLanguage(); // "es", "en", etc.
+        String idioma = java.util.Locale.getDefault().getLanguage();
         String sinopsis = peli.getSinopsis().get(idioma);
         if (sinopsis == null) {
-            sinopsis = peli.getSinopsis().get("es"); // idioma por defecto
+            sinopsis = peli.getSinopsis().get("es");
         }
         holder.detalle.setText(sinopsis);
 
@@ -78,9 +78,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Pelicu
                     .get()
                     .addOnSuccessListener(snapshot -> {
                         if (snapshot.exists()) {
-                            holder.estrella.setImageResource(R.drawable.ic_star_filled); // naranja
+                            holder.estrella.setImageResource(R.drawable.ic_star_filled);
                         } else {
-                            holder.estrella.setImageResource(R.drawable.ic_star_border); // blanca
+                            holder.estrella.setImageResource(R.drawable.ic_star_border);
                         }
                     });
         }

@@ -7,7 +7,7 @@ public class Pelicula implements Serializable {
     private String id;
     private String imagenUrl;
     private String nombrePeli;
-    private Map<String, String> sinopsis; // Cambiado aquí
+    private Map<String, String> sinopsis;
     private String urlTrailer;
     private String urlPelicula;
 

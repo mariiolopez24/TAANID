@@ -50,7 +50,7 @@ public class Lista extends Fragment {
 
         configurarLayoutManager();
 
-        // Listener para filtrar mientras se escribe
+
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -170,9 +170,6 @@ public class Lista extends Fragment {
                                     pelicula.setId(doc.getId());
                                     peliculas.add(pelicula);
                                 }
-                            } else {
-                                // Puedes registrar el error o mostrar un mensaje si lo deseas
-                                // Log.w("Firestore", "Formato incorrecto en sinopsis para doc: " + doc.getId());
                             }
                         }
 

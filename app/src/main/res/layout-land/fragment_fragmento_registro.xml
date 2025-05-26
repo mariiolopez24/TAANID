@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Contenedor horizontal -->
         <LinearLayout
             android:id="@+id/contenedorPrincipal"
             android:layout_width="0dp"
@@ -20,7 +19,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Columna izquierda: campos -->
             <LinearLayout
                 android:id="@+id/columnaIzquierda"
                 android:layout_width="0dp"
@@ -28,7 +26,6 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Usuario -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,7 +51,6 @@
                         android:paddingStart="4dp" />
                 </LinearLayout>
 
-                <!-- Contraseña -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,7 +77,6 @@
                         android:paddingStart="4dp" />
                 </LinearLayout>
 
-                <!-- Nombre -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,7 +103,6 @@
                         android:paddingStart="4dp" />
                 </LinearLayout>
 
-                <!-- Fecha de nacimiento -->
                 <EditText
                     android:id="@+id/txtFechaNacimiento"
                     android:layout_width="match_parent"
@@ -122,7 +116,6 @@
                     android:padding="16dp" />
             </LinearLayout>
 
-            <!-- Columna derecha: botones -->
             <LinearLayout
                 android:id="@+id/columnaDerecha"
                 android:layout_width="0dp"
@@ -152,7 +145,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Botón Registrarse centrado -->
         <Button
             android:id="@+id/botonRegistrarse"
             android:layout_width="wrap_content"
@@ -164,7 +156,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Leyenda -->
         <TextView
             android:id="@+id/leyenda"
             android:layout_width="wrap_content"

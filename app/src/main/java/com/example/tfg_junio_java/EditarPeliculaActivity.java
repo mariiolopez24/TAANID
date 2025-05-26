@@ -69,7 +69,7 @@ public class EditarPeliculaActivity extends AppCompatActivity {
         btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
         btnGuardarCambios.setOnClickListener(v -> guardarCambios());
 
-        // Mostrar solo la sinopsis correspondiente al idioma
+
         String idioma = Locale.getDefault().getLanguage();
         if (idioma.equals("es")) {
             editSinopsis.setVisibility(View.VISIBLE);

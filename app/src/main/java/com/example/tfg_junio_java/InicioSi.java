@@ -118,7 +118,7 @@ public class InicioSi extends AppCompatActivity {
                             btnSubir.setVisibility(View.GONE);
                         }
 
-                        // Cargar avatar
+
                         String avatarUrl = documentSnapshot.getString("Avatar");
                         if (avatarUrl != null && !avatarUrl.isEmpty()) {
                             Glide.with(this)
@@ -170,7 +170,7 @@ public class InicioSi extends AppCompatActivity {
 
         if (currentFragment instanceof Lista) {
             if (!esAnonimo) {
-                // Mostrar diálogo personalizado solo si el usuario está registrado
+
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirmacion, null);
 
                 AlertDialog dialog = new AlertDialog.Builder(this)

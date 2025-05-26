@@ -37,7 +37,7 @@ public class SubirPeliculaActivity extends AppCompatActivity {
 
         editNombre = findViewById(R.id.editNombre);
         editSinopsis = findViewById(R.id.editSinopsis);
-        editSinopsisEn = findViewById(R.id.editSinopsisEn); // nuevo
+        editSinopsisEn = findViewById(R.id.editSinopsisEn);
         editTrailer = findViewById(R.id.editTrailer);
         editUrlPelicula = findViewById(R.id.editUrlPelicula);
         imagePreview = findViewById(R.id.imagePreview);

@@ -129,7 +129,7 @@ public class Detalles extends Fragment {
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.setWebViewClient(new WebViewClient());
 
-                    // Extraer ID del video de YouTube
+
                     String videoId = Uri.parse(pelicula.getUrlPelicula()).getQueryParameter("v");
                     if (videoId != null) {
                         String embedUrl = "https://www.youtube.com/embed/" + videoId;
@@ -179,12 +179,12 @@ public class Detalles extends Fragment {
         if (user == null || user.isAnonymous()) {
             editComentario.setOnTouchListener((v, event) -> {
                 Toast.makeText(getContext(), getString(R.string.iniciarComentar), Toast.LENGTH_SHORT).show();
-                return true; // evita que se abra el teclado
+                return true;
             });
 
             ratingBar.setOnTouchListener((v, event) -> {
                 Toast.makeText(getContext(), getString(R.string.iniciarPuntuar), Toast.LENGTH_SHORT).show();
-                return true; // evita que se modifique la puntuación
+                return true;
             });
 
             btnEnviarComentario.setEnabled(false);
@@ -247,7 +247,7 @@ public class Detalles extends Fragment {
                         String nombre = doc.getString("nombreUsuario");
                         String texto = doc.getString("comentario");
                         int puntuacion = doc.getLong("puntuacion").intValue();
-                        String comentarioId = doc.getId(); // ID del comentario en Firestore
+                        String comentarioId = doc.getId();
                         String usuarioIdComentario = doc.getString("usuarioId");
                         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                         boolean esPropio = currentUser != null && currentUser.getUid().equals(usuarioIdComentario);
@@ -270,7 +270,7 @@ public class Detalles extends Fragment {
                         rating.setStepSize(1.0f);
                         rating.setRating(puntuacion);
                         rating.setIsIndicator(true);
-                        rating.setScaleX(0.85f); // ajusta el tamaño visual
+                        rating.setScaleX(0.85f);
                         rating.setScaleY(0.85f);
                         rating.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF6600")));
 
@@ -299,7 +299,7 @@ public class Detalles extends Fragment {
                             ImageButton btnEliminar = new ImageButton(getContext());
                             btnEliminar.setImageResource(R.drawable.ic_delete);
                             btnEliminar.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-                            btnEliminar.setColorFilter(Color.WHITE); // Ícono blanco
+                            btnEliminar.setColorFilter(Color.WHITE);
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                     LinearLayout.LayoutParams.WRAP_CONTENT,
                                     LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -331,7 +331,7 @@ public class Detalles extends Fragment {
                                             .delete()
                                             .addOnSuccessListener(aVoid -> {
                                                 Toast.makeText(getContext(), getString(R.string.comentEliminado), Toast.LENGTH_SHORT).show();
-                                                cargarComentarios(); // Recargar comentarios
+                                                cargarComentarios();
                                             })
                                             .addOnFailureListener(e -> {
                                                 Toast.makeText(getContext(), getString(R.string.errorComentEliminado), Toast.LENGTH_SHORT).show();
