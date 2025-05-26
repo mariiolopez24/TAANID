@@ -47,7 +47,7 @@
                 android:id="@+id/editSinopsisEn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="string/sinopsisEn"
+                android:hint="@string/sinopsisEn"
                 android:backgroundTint="#FF6600"
                 android:textColor="#FF6600"
                 android:textColorHint="#FF6600"
