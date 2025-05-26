@@ -5,17 +5,15 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">#000000</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Overlay para SearchView -->
     <style name="ThemeOverlay.TFG.SearchView" parent="ThemeOverlay.Material3.Search">
         <item name="searchViewStyle">@style/Widget.TFG.SearchView</item>
     </style>
 
-    <!-- Estilo personalizado para SearchView -->
     <style name="Widget.TFG.SearchView" parent="Widget.Material3.SearchView">
         <item name="android:background">@drawable/searchview_background</item>
         <item name="android:textColorHint">@color/orange</item>

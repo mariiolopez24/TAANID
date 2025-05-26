@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#000000">
+
+    <EditText
+        android:id="@+id/editComentarioDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edita tu comentario"
+        android:background="@drawable/edittext_background"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#AAAAAA"
+        android:padding="8dp" />
+
+    <RatingBar
+        android:id="@+id/ratingBarDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:layout_marginTop="12dp"
+        android:progressTint="#FF6600" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnCancelarComentario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:textColor="#FF6600"
+            android:backgroundTint="#222222"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnGuardarComentario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            android:textColor="#000000"
+            android:backgroundTint="#FF6600" />
+    </LinearLayout>
+</LinearLayout>

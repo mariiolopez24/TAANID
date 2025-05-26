@@ -248,12 +248,14 @@ public class Detalles extends Fragment {
                         String texto = doc.getString("comentario");
                         int puntuacion = doc.getLong("puntuacion").intValue();
                         String comentarioId = doc.getId(); // ID del comentario en Firestore
+                        String usuarioIdComentario = doc.getString("usuarioId");
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        boolean esPropio = currentUser != null && currentUser.getUid().equals(usuarioIdComentario);
 
                         LinearLayout comentarioLayout = new LinearLayout(getContext());
                         comentarioLayout.setOrientation(LinearLayout.HORIZONTAL);
                         comentarioLayout.setGravity(Gravity.CENTER_VERTICAL);
                         comentarioLayout.setPadding(0, 8, 0, 8);
-
 
                         TextView tv = new TextView(getContext());
                         tv.setText(nombre + ": " + texto);
@@ -274,6 +276,24 @@ public class Detalles extends Fragment {
 
                         comentarioLayout.addView(tv);
                         comentarioLayout.addView(rating);
+
+                        if (esPropio) {
+                            ImageButton btnEditar = new ImageButton(getContext());
+                            btnEditar.setImageResource(R.drawable.ic_edit);
+                            btnEditar.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF6600")));
+                            btnEditar.setColorFilter(Color.WHITE);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(16, 8, 0, 8);
+                            btnEditar.setLayoutParams(params);
+
+                            btnEditar.setOnClickListener(v -> {
+                                mostrarDialogoEditarComentario(doc.getId(), texto, puntuacion);
+                            });
+
+                            comentarioLayout.addView(btnEditar);
+                        }
 
                         if (esAdmin) {
                             ImageButton btnEliminar = new ImageButton(getContext());
@@ -328,6 +348,50 @@ public class Detalles extends Fragment {
                         layoutComentarios.addView(comentarioLayout);
                     }
                 });
+    }
+
+    private void mostrarDialogoEditarComentario(String comentarioId, String textoActual, int puntuacionActual) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_editar_comentario, null);
+        builder.setView(dialogView);
+
+        EditText editComentario = dialogView.findViewById(R.id.editComentarioDialog);
+        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBarDialog);
+        Button btnGuardar = dialogView.findViewById(R.id.btnGuardarComentario);
+        Button btnCancelar = dialogView.findViewById(R.id.btnCancelarComentario);
+
+        editComentario.setText(textoActual);
+        ratingBar.setRating(puntuacionActual);
+
+        AlertDialog dialog = builder.create();
+
+        btnGuardar.setOnClickListener(v -> {
+            String nuevoTexto = editComentario.getText().toString().trim();
+            int nuevaPuntuacion = (int) ratingBar.getRating();
+
+            if (nuevoTexto.isEmpty()) {
+                Toast.makeText(getContext(), "El comentario no puede estar vacío", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseFirestore.getInstance()
+                    .collection("Peliculas").document(pelicula.getId())
+                    .collection("Comentarios").document(comentarioId)
+                    .update("comentario", nuevoTexto, "puntuacion", nuevaPuntuacion)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getContext(), "Comentario actualizado", Toast.LENGTH_SHORT).show();
+                        cargarComentarios();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Error al actualizar", Toast.LENGTH_SHORT).show();
+                    });
+
+            dialog.dismiss();
+        });
+
+        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     private int dpToPx(int dp) {
