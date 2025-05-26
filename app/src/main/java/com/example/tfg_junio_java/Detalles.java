@@ -320,9 +320,6 @@ public class Detalles extends Fragment {
                                 Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
                                 Button btnAceptar = dialogView.findViewById(R.id.btnAceptar);
 
-                                title.setText("Eliminar comentario");
-                                message.setText("¿Estás seguro de que deseas eliminar este comentario?");
-
                                 btnCancelar.setOnClickListener(v1 -> dialog.dismiss());
                                 btnAceptar.setOnClickListener(v1 -> {
                                     FirebaseFirestore.getInstance()
@@ -388,9 +385,7 @@ public class Detalles extends Fragment {
 
             dialog.dismiss();
         });
-
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
     }
 
