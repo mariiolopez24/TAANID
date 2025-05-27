@@ -295,7 +295,7 @@ public class Detalles extends Fragment {
                             comentarioLayout.addView(btnEditar);
                         }
 
-                        if (esAdmin) {
+                        if (esAdmin || esPropio) {
                             ImageButton btnEliminar = new ImageButton(getContext());
                             btnEliminar.setImageResource(R.drawable.ic_delete);
                             btnEliminar.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
