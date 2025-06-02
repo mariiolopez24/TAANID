@@ -28,7 +28,7 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PeliculasViewHolder> implements Filterable {
 
-    private final ArrayList<Pelicula> listaPelis;
+    public final ArrayList<Pelicula> listaPelis;
     private final ArrayList<Pelicula> listaPelisFull;
     private final FragmentTransaction ft;
     private final boolean esAdmin;
